@@ -223,16 +223,25 @@ const GR=o=>({k:'gr',...o});
 const F=o=>({k:'f',...o});
 const R=o=>({k:'r',...o});
 const GP=n=>({k:'gp',stage:n});
+const D=o=>({k:'dl',...o});
 const FULL=['address','takeaway','top','down','impact','finish'];
 
 const DRILLS=[
 // ---------- SWING ----------
-{id:'s-grip',cat:'swing',name:'The Grip',min:5,where:'Home',need:'Any club',steps:[
- ['Lay the grip across the base of the fingers on your lead hand (left hand for righties). Fingers, not palm.',GP(1)],
- ['Close your lead hand. Look down: you should see 2 or 3 knuckles.',GP(2)],
- ['The "V" between your thumb and first finger points at your trail shoulder.',GP(3)],
- ['Trail hand goes below. Its palm covers your lead thumb. Pinkies overlap or interlock, whichever is comfy.',GP(4)],
- ['Squeeze gently, about a 4 out of 10. Like holding a tube of toothpaste without squirting it.',GP(5)]]},
+{id:'s-grip',cat:'swing',name:'The Grip',min:5,where:'Home',need:'Any club (lefties: swap left and right)',steps:[
+ ['Hold your top hand out, palm facing you. That\'s your left hand if you\'re right-handed. Lay the handle across the base of your fingers, where they meet your palm. Not in the middle of your palm.',GP(1)],
+ ['Wrap your fingers around the handle. Look down at your top hand: you should see 2 or 3 knuckles.',GP(2)],
+ ['Rest your thumb on the handle, a little to the right. The crease between your thumb and pointer finger makes a "V". It points at your right shoulder.',GP(3)],
+ ['Put your bottom hand on just below. The palm of your bottom hand covers your top thumb, like a lid.',GP(4)],
+ ['Pinkies: the easiest way is all 10 fingers on the handle, like a baseball bat. You can also hook your bottom pinky over or between your top fingers. Use whichever feels comfortable.',GP(5)],
+ ['Check: both V\'s point at your right shoulder. Squeeze gently, about 4 out of 10, like holding a tube of toothpaste without squirting it.',GP(6)]]},
+{id:'s-distance',cat:'swing',name:'How Far to Stand',min:5,where:'Home',need:'Any club',added:'2026-11-17',steps:[
+ ['Stand up tall. Hold the club straight out in front of you at belly-button height.',D({mode:'tall'})],
+ ['Keep your back straight and bend forward from your hips. Let the club come down until it touches the ground. That spot is where the ball goes.',D({mode:'hinge'})],
+ ['Your arms hang straight down from your shoulders. Not reaching out, not squished in.',D({mode:'hang'})],
+ ['Check: about one fist of space fits between the end of the club and your legs.',D({mode:'fist'})],
+ ['Too close: your arms feel jammed and you hit it off the heel. Too far: you reach and tip onto your toes.',D({mode:'compare'})],
+ ['Longer clubs put you farther from the ball by themselves. Same posture every time; the club length does the work.',D({mode:'clubs'})]]},
 {id:'s-setup',cat:'swing',name:'Setup & Posture',min:5,where:'Home',need:'Any club',steps:[
  ['Feet about shoulder-width apart.',G('address',{hl:'feet',label:'Shoulder-width'})],
  ['Bend forward from your hips, not your waist. Push your butt back a little.',G('address',{hl:'hips',label:'Hinge at hips'})],
@@ -384,7 +393,7 @@ function setExtras(docs){
     const dr={id:'x-'+doc.id,cat:d.cat,name:String(d.name||'New drill'),min:+d.min||10,where:String(d.where||'Range'),need:String(d.need||'Clubs and balls'),steps,added:String(d.added||''),extra:true};
     DRILLS.push(dr);BY[dr.id]=dr}catch(e){}});
 }
-const SCENE_KINDS=['g','gr','f','r','gp'];
+const SCENE_KINDS=['g','gr','f','r','gp','dl'];
 const POSE_NAMES=['address','takeaway','half','top','down','impact','through','finish','chipAddr','chipBack','chipThru','puttAddr','puttBack','puttThru','p730','p9','p1030'];
 const isNew=d=>d.added&&(dayNum(today())-dayNum(d.added))<=4;
 
@@ -420,7 +429,7 @@ const PHASES=[
 // task: [text, where, drillId|null, type]
 const PLAN={
 1:[['Learn the grip and setup (10 min, 3 days)','Home','s-grip'],['10 slow-motion swings, 3 days this week','Home','s-slowmo'],['Putting setup + Tee Gate drill (20 min)','Green','p-gate'],['Basic chip setup (15 min)','Green','c-setup'],['Small bucket with spare-club alignment','Range','s-align'],['Play 9 or 18 holes. Write your score.','Course',null,'play']],
-2:[['Setup & posture check in a mirror (10 min)','Home','s-setup'],['Low & slow takeaway, 3 days','Home','s-takeaway'],['Around-the-Clock putting (15 min)','Green','p-clock'],['Tee Behind the Ball chipping (15 min)','Green','c-tee'],['Small bucket: Hold the Finish on every ball','Range','s-finish'],['Play a round. Write your score.','Course',null,'play']],
+2:[['How far to stand + setup check (10 min)','Home','s-distance'],['Low & slow takeaway, 3 days','Home','s-takeaway'],['Around-the-Clock putting (15 min)','Green','p-clock'],['Tee Behind the Ball chipping (15 min)','Green','c-tee'],['Small bucket: Hold the Finish on every ball','Range','s-finish'],['Play a round. Write your score.','Course',null,'play']],
 3:[['Turn to the Top, 3 days','Home','s-turn'],['Towel Under Arms (10 min)','Home','s-towel'],['Start-Line Gate putting (15 min)','Green','p-start'],['Towel Landing Spot chipping (15 min)','Green','c-towel'],['Medium bucket: Feet-Together drill then normal','Range','s-feet'],['Play a round. Count your putts too.','Course',null,'play']],
 4:[['Slow-motion swings, 3 days','Home','s-slowmo'],['Chipping Ladder (20 min)','Green','c-ladder'],['One Stroke, Three Clubs (15 min)','Green','c-clubs'],['Lag Ladder putting (20 min)','Green','p-ladder'],['Small bucket: Pump Drill','Range','s-pump'],['Play a round. Write your score.','Course',null,'play']],
 5:[['Clock-Face Pitches: 7:30, 9:00, 10:30 (20 min)','Range','c-clock'],['Past-the-Hole putting (15 min)','Green','p-past'],['Up-and-Down Game. Write your score out of 18.','Green','c-updown'],['Trail-Hand Only putting (10 min)','Green','p-onehand'],['Small bucket: 3-to-1 Tempo','Range','l-tempo'],['Play a round. Write your score.','Course',null,'play']],
@@ -672,30 +681,90 @@ SCENES.g=function(ctx,t,o,st){const C=COL;
     if(txt)label(ctx,200,26,txt,{size:24,bg:COL.flag,fg:'#fff',abs:true})}
   else if(o.label)label(ctx,200,24,o.label,{size:18,abs:true});
 };
-// grip close-up
-SCENES.gp=function(ctx,t,o){const C=COL,s=o.stage;ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);
-  ctx.save();mirror(ctx,!!S.lefty);
-  const gx=190;line(ctx,gx,0,gx,250,6,C.steel);ctx.fillStyle=C.grip;roundRect(ctx,gx-14,-10,28,180,8);ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;for(let y=0;y<170;y+=8){ctx.beginPath();ctx.moveTo(gx-14,y);ctx.lineTo(gx+14,y);ctx.stroke()}
-  const pulse=.55+.45*Math.sin(t*5);
-  if(s===1){ctx.save();ctx.strokeStyle=C.gold;ctx.lineWidth=10;ctx.globalAlpha=.85;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(gx-40,95);ctx.lineTo(gx+40,40);ctx.stroke();ctx.restore();
-    // open hand
-    ctx.fillStyle=C.skin;ctx.globalAlpha=.9;roundRect(ctx,gx-90,60,70,80,20);ctx.fill();for(let i=0;i<4;i++){roundRect(ctx,gx-26+i*0,42+i*0,0,0,0)}
-    for(let i=0;i<4;i++){ctx.save();ctx.translate(gx-30,66+i*18);ctx.rotate(-.55);roundRect(ctx,0,-7,66,14,7);ctx.fill();ctx.restore()}ctx.globalAlpha=1}
-  if(s>=2){const slide=s===2?Math.min(1,t*1.5):1;ctx.globalAlpha=slide;ctx.fillStyle=C.skin;roundRect(ctx,gx-34,30,74,72,18);ctx.fill();
-    ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=2;for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(gx+14,48+i*16);ctx.lineTo(gx+38,48+i*16);ctx.stroke()}
-    // thumb
-    ctx.fillStyle=C.skin;roundRect(ctx,gx-4,70,16,48,8);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();
-    // knuckles
-    ctx.fillStyle=C.flag;ctx.globalAlpha=s===2?pulse:.6;[[gx+30,36],[gx+18,32],[gx+6,32]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,4.5,0,7);ctx.fill()});ctx.globalAlpha=1}
-  if(s>=3){ctx.save();ctx.globalAlpha=s===3?pulse:.6;ctx.strokeStyle=C.flag;ctx.lineWidth=4;ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(gx-6,74);ctx.lineTo(gx+120,10);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle=C.flag;ctx.beginPath();ctx.moveTo(gx+130,5);ctx.lineTo(gx+112,8);ctx.lineTo(gx+121,22);ctx.fill();ctx.restore()}
-  if(s>=4){const sl=s===4?Math.min(1,t*1.2):1;ctx.globalAlpha=Math.min(1,sl*1.3);ctx.fillStyle=C.skin;const y=lerp(170,100,ease(sl));roundRect(ctx,gx-36,y,76,66,18);ctx.fill();
-    ctx.strokeStyle='rgba(0,0,0,.28)';ctx.lineWidth=2;roundRect(ctx,gx-36,y,76,66,18);ctx.stroke();for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(gx+16,y+18+i*15);ctx.lineTo(gx+40,y+18+i*15);ctx.stroke()}ctx.globalAlpha=1}
-  if(s===5){for(let i=0;i<10;i++){ctx.fillStyle=i<4?(i===3?C.flag:C.gold):C.line;ctx.globalAlpha=i<4?(.7+.3*Math.sin(t*4)):1;roundRect(ctx,300,214-i*18,40,13,4);ctx.fill()}ctx.globalAlpha=1}
+// grip: stage 1 = open top hand seen palm-on; stages 2-6 = the hands on the club, seen face-on
+function skinShape(ctx,x,y,w,h,r){ctx.fillStyle=COL.skin;roundRect(ctx,x,y,w,h,r);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=1.5;ctx.stroke()}
+function arrowTo(ctx,x1,y1,x2,y2,c,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.lineCap='round';ctx.strokeStyle='#fff';ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.strokeStyle=c;ctx.fillStyle=c;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.translate(x2,y2);ctx.rotate(a);ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(-10,-8);ctx.lineTo(-10,8);ctx.closePath();ctx.fill();ctx.restore()}
+SCENES.gp=function(ctx,t,o){const C=COL,s=o.stage,pulse=.55+.45*Math.sin(t*5),side=S.lefty?'left':'right',Side=S.lefty?'Left':'Right';
+  ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);ctx.save();mirror(ctx,!!S.lefty);
+  let cap='';
+  if(s===1){
+    const F=[[150,64],[174,42],[198,34],[222,46]];
+    F.forEach(([x,top])=>skinShape(ctx,x,top,21,124-top,10));
+    ctx.save();ctx.translate(240,186);ctx.rotate(.6);skinShape(ctx,-12,-78,25,84,12);ctx.restore();
+    skinShape(ctx,146,108,102,104,30);
+    ctx.strokeStyle='rgba(0,0,0,.22)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(152,112);ctx.lineTo(242,112);ctx.stroke();
+    F.forEach(([x,top])=>{const y=(top+112)/2;ctx.beginPath();ctx.moveTo(x+4,y);ctx.lineTo(x+17,y);ctx.stroke()});
+    ctx.save();ctx.globalAlpha=.85;ctx.strokeStyle=C.flag;ctx.lineWidth=3;ctx.beginPath();ctx.arc(196,170,17,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(184,158);ctx.lineTo(208,182);ctx.stroke();ctx.restore();
+    const u=ease(Math.min(1,(t%4.5)/1.3));ctx.save();ctx.translate(lerp(200,0,u),0);ctx.lineCap='round';
+    ctx.strokeStyle=C.grip;ctx.lineWidth=20;ctx.beginPath();ctx.moveTo(252,80);ctx.lineTo(144,124);ctx.stroke();
+    ctx.strokeStyle=C.steel;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(144,124);ctx.lineTo(40,166);ctx.stroke();ctx.restore();
+    cap='Handle goes in the fingers';
+  }else{
+    // chest, shoulders and arms above the hands
+    ctx.fillStyle=C.shirt;roundRect(ctx,60,-70,280,96,44);ctx.fill();
+    line(ctx,104,16,184,82,18,C.shirt);line(ctx,296,16,216,82,18,C.shirt);
+    // handle and shaft
+    line(ctx,200,170,200,260,6,C.steel);ctx.fillStyle=C.grip;roundRect(ctx,186,48,28,150,8);ctx.fill();
+    // top hand: fingertips curl round the left side, back of hand faces you, thumb down the front
+    for(let i=0;i<4;i++)skinShape(ctx,170,74+i*11,22,12,6);
+    skinShape(ctx,184,62,52,60,16);
+    const K=[[198,68],[210,70],[221,74],[230,80]];ctx.fillStyle='rgba(0,0,0,.2)';K.forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,3.6,0,7);ctx.fill()});
+    skinShape(ctx,190,100,16,42,8);
+    if(s===2){K.slice(1).forEach(([x,y])=>ring(ctx,x,y,6,t));cap='Look down: 2–3 knuckles show'}
+    if(s>=4){const u=s===4?ease(Math.min(1,(t%4)/1.2)):1,y=lerp(232,112,u);
+      for(let i=0;i<4;i++)skinShape(ctx,220,y+6+i*11,22,12,6);
+      skinShape(ctx,166,y,58,58,16);skinShape(ctx,182,y+26,16,40,8);
+      if(s===4)cap='Bottom palm covers top thumb';}
+    if(s===3)cap='V points at your '+side+' shoulder';
+    if(s===3||s===6)arrowTo(ctx,192,101,140,58,C.flag,s===3?.65+.35*Math.sin(t*5):.9);
+    if(s===6)arrowTo(ctx,184,140,150,62,C.gold,.95);
+    if(s===5){ring(ctx,198,114,13,t,24);cap='Pinky: all 10, overlap, or hook'}
+    if(s===6){for(let i=0;i<10;i++){ctx.fillStyle=i<4?(i===3?C.flag:C.gold):C.line;ctx.globalAlpha=i<4?(.7+.3*Math.sin(t*4)):1;roundRect(ctx,326,204-i*17,38,12,4);ctx.fill()}ctx.globalAlpha=1;cap="Both V's → "+side+' shoulder'}
+  }
   ctx.restore();MIR=false;
-  const L={1:'Fingers, not palm',2:'See 2–3 knuckles',3:'V points to trail shoulder',4:'Trail palm covers lead thumb',5:'Pressure: 4 out of 10'}[s];label(ctx,200,232,L,{size:18,abs:true});
-  if(s===5)label(ctx,S.lefty?80:320,24,'4 / 10',{size:16,abs:true,bg:COL.flag,fg:'#fff'})};
+  if(s>1)label(ctx,S.lefty?290:110,40,Side+' shoulder',{size:14,abs:true,alpha:.9,bg:COL.flag,fg:'#fff'});
+  if(s===1)label(ctx,200,22,'Top hand, palm facing you',{size:15,abs:true,alpha:.75});
+  if(s===6)label(ctx,S.lefty?55:345,228,'Squeeze 4/10',{size:14,abs:true,bg:COL.flag,fg:'#fff'});
+  if(cap)label(ctx,200,s===1?232:226,cap,{size:18,abs:true})};
+
+// down-the-line view (camera behind the golfer): how far to stand from the ball
+const DL={
+ tall:{knee:[140,174],hip:[138,136],sh:[140,80],head:[143,57],hands:[198,124],ang:8,L:72},
+ addr:{knee:[154,176],hip:[122,138],sh:[160,94],head:[172,74],hands:[162,150],ang:60,L:72},
+ driver:{knee:[154,176],hip:[122,138],sh:[160,92],head:[172,72],hands:[166,146],ang:48,L:90},
+ close:{knee:[154,176],hip:[122,138],sh:[156,96],head:[168,76],hands:[146,146],ang:66,L:72},
+ far:{knee:[158,175],hip:[126,137],sh:[168,96],head:[182,77],hands:[190,150],ang:57,L:72}
+};
+function dlLerp(a,b,u){const p={};for(const k in a)p[k]=Array.isArray(a[k])?[lerp(a[k][0],b[k][0],u),lerp(a[k][1],b[k][1],u)]:lerp(a[k],b[k],u);return p}
+function dlHead(p){const a=rad(p.ang);return [p.hands[0]+p.L*Math.cos(a),p.hands[1]+p.L*Math.sin(a)]}
+function drawDL(ctx,p,alpha){const C=COL;ctx.save();ctx.globalAlpha=alpha??1;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.fillStyle=C.ink;ctx.beginPath();ctx.ellipse(148,209,15,4.5,0,0,7);ctx.fill();
+  ctx.strokeStyle=C.pants;ctx.lineWidth=13;ctx.beginPath();ctx.moveTo(140,205);ctx.lineTo(p.knee[0],p.knee[1]);ctx.lineTo(p.hip[0],p.hip[1]);ctx.stroke();
+  ctx.strokeStyle=C.shirt;ctx.lineWidth=24;ctx.beginPath();ctx.moveTo(p.hip[0],p.hip[1]-4);ctx.lineTo(p.sh[0],p.sh[1]);ctx.stroke();
+  ctx.fillStyle=C.skin;ctx.beginPath();ctx.arc(p.head[0],p.head[1],13,0,7);ctx.fill();
+  ctx.fillStyle=C.cap;ctx.beginPath();ctx.arc(p.head[0],p.head[1]-3,13.5,Math.PI,0);ctx.fill();ctx.fillRect(p.head[0],p.head[1]-6,18,4);
+  const ch=dlHead(p),a=rad(p.ang),ux=Math.cos(a),uy=Math.sin(a);
+  line(ctx,p.hands[0],p.hands[1],ch[0],ch[1],3,C.steel);line(ctx,p.hands[0]-ux*8,p.hands[1]-uy*8,p.hands[0]+ux*14,p.hands[1]+uy*14,6,C.grip);
+  const big=p.L>80;ctx.fillStyle=big?C.grip:C.steel;roundRect(ctx,ch[0]-4,ch[1]-(big?7:5),big?20:15,big?9:6,3);ctx.fill();
+  ctx.strokeStyle=C.skin;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(p.sh[0],p.sh[1]+4);ctx.lineTo(p.hands[0],p.hands[1]);ctx.stroke();
+  ctx.fillStyle=C.skin;ctx.beginPath();ctx.arc(p.hands[0],p.hands[1],6,0,7);ctx.fill();ctx.restore();return ch}
+SCENES.dl=function(ctx,t,o){const C=COL;ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);ctx.fillStyle=C.turf;ctx.fillRect(0,GROUND,400,38);ctx.fillStyle=C.turf2;ctx.fillRect(0,GROUND,400,4);
+  ctx.save();mirror(ctx,!!S.lefty);let cap=o.label||'',bad=false;const m=o.mode||'addr',ball=ch=>ballAt(ctx,ch[0]+8,GROUND-5);
+  if(m==='tall'){drawDL(ctx,DL.tall);cap=cap||'Stand tall, club out front'}
+  else if(m==='hinge'){const tt=t%4.8,u=ease(Math.max(0,Math.min(1,(tt-.8)/1.6)));const ch=drawDL(ctx,dlLerp(DL.tall,DL.addr,u));
+    if(u>=1){ball(ch);ring(ctx,ch[0]+8,GROUND-5,12,t);cap='Ball goes here'}else cap='Bend from your hips'}
+  else if(m==='hang'){ball(drawDL(ctx,DL.addr));ctx.save();ctx.setLineDash([5,5]);ctx.strokeStyle=C.flag;ctx.lineWidth=2.5;ctx.globalAlpha=.55+.45*Math.sin(t*4);
+    ctx.beginPath();ctx.moveTo(DL.addr.sh[0],DL.addr.sh[1]-6);ctx.lineTo(DL.addr.sh[0],GROUND);ctx.stroke();ctx.restore();cap=cap||'Arms hang straight down'}
+  else if(m==='fist'){const p=DL.addr;ball(drawDL(ctx,p));const a=rad(p.ang),bx=p.hands[0]-Math.cos(a)*9,by=p.hands[1]-Math.sin(a)*9;
+    const tu=(by-p.hip[1])/(p.knee[1]-p.hip[1]),tx=lerp(p.hip[0],p.knee[0],tu)+7;
+    ctx.save();ctx.globalAlpha=.75+.25*Math.sin(t*4);ctx.fillStyle=C.flag;roundRect(ctx,tx,by-8,bx-tx,16,7);ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.stroke();ctx.restore();label(ctx,(tx+bx)/2-46,by-4,'1 fist',{size:13,abs:false});cap=cap||'About one fist of space'}
+  else if(m==='compare'){const k=Math.floor(t/2.4)%2;drawDL(ctx,DL.addr,.18);ball(drawDL(ctx,k?DL.far:DL.close));cap=k?'Too far: reaching':'Too close: cramped';bad=true}
+  else if(m==='clubs'){const k=Math.floor(t/2.4)%2,g=dlHead(k?DL.addr:DL.driver);ctx.save();ctx.globalAlpha=.35;ballAt(ctx,g[0]+8,GROUND-5);ctx.restore();ball(drawDL(ctx,k?DL.driver:DL.addr));cap=k?'Driver: ball farther away':'7 iron: ball closer'}
+  else ball(drawDL(ctx,DL.addr));
+  ctx.restore();MIR=false;
+  if(cap)label(ctx,200,24,cap,{size:18,abs:true,bg:bad?COL.flag:COL.ink,fg:bad?'#fff':COL.surface});
+  label(ctx,S.lefty?62:338,234,'View from behind',{size:13,abs:true,alpha:.55})};
 // top-down putting green
 SCENES.gr=function(ctx,t,o,st){const C=COL;ctx.fillStyle=C.turf;ctx.fillRect(0,0,400,250);
   if(o.edge){ctx.fillStyle=C.putt;ctx.beginPath();ctx.ellipse(220,125,150,92,0,0,7);ctx.fill()}
