@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Practice Tee">
+<meta name="theme-color" content="#1d7a3e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+<title>Practice Tee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one-column app, sticky scorecard header, big bottom tab bar, full-screen drill player */
+:root{
+  --bg:#eaf1e6; --surface:#ffffff; --surface2:#f4f8f1; --ink:#11261a; --muted:#56695b; --line:#d3e0cf;
+  --fair:#1d7a3e; --fair-deep:#0e4a24; --on-fair:#ffffff; --flag:#d63a2b; --gold:#e9b625; --sand:#e2d2a4;
+  --turf:#4f9a50; --turf2:#5aa65a; --putt:#78c36f; --putt2:#84cc7a; --soil:#7a5a3a; --sky:#dcefff;
+  --skin:#e2ab7f; --shirt:#1d7a3e; --pants:#33404a; --cap:#f4f4f0; --steel:#8e9aa3; --grip:#22282c; --ball:#ffffff; --hole:#13221a;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b1710; --surface:#132419; --surface2:#182d1f; --ink:#e4efe5; --muted:#97ad9c; --line:#25402d;
+  --fair:#3dae66; --fair-deep:#b9e8c8; --on-fair:#06140b; --flag:#f0604f; --gold:#f2c94c; --sand:#c9b98a;
+  --turf:#2e6a33; --turf2:#34743a; --putt:#3f8a45; --putt2:#46944c; --soil:#4d3a27; --sky:#173048;
+  --skin:#d9a077; --shirt:#3dae66; --pants:#9aa7b1; --cap:#e9ece6; --steel:#a7b2ba; --grip:#0d1012; --ball:#ffffff; --hole:#050a07;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1710; --surface:#132419; --surface2:#182d1f; --ink:#e4efe5; --muted:#97ad9c; --line:#25402d;
+  --fair:#3dae66; --fair-deep:#b9e8c8; --on-fair:#06140b; --flag:#f0604f; --gold:#f2c94c; --sand:#c9b98a;
+  --turf:#2e6a33; --turf2:#34743a; --putt:#3f8a45; --putt2:#46944c; --soil:#4d3a27; --sky:#173048;
+  --skin:#d9a077; --shirt:#3dae66; --pants:#9aa7b1; --cap:#e9ece6; --steel:#a7b2ba; --grip:#0d1012; --ball:#ffffff; --hole:#050a07;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--fair-deep)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:.01em}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--fair);color:var(--on-fair);
+  padding-block:10px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:root:not([data-theme="light"]) .top{background:var(--fair)}
+.top-in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.brand{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:.02em;text-transform:uppercase;line-height:1;flex:1;min-width:0}
+.brand small{display:block;font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.08em;opacity:.85;margin-top:3px}
+.lvl{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:120px}
+.lvl b{font-family:var(--display);font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+.xpbar{width:120px;height:8px;border-radius:8px;background:rgba(255,255,255,.28);overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--gold);border-radius:8px;transition:width .5s}
+.lvl span{font-size:12px;opacity:.9;font-variant-numeric:tabular-nums}
+
+main{max-width:720px;margin:0 auto;padding-block:16px 120px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.nav-in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+.nav button{background:none;border:0;padding:8px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);
+  font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.nav button svg{width:28px;height:28px}
+.nav button[aria-current="page"]{color:var(--fair)}
+.nav button[aria-current="page"] .dot{opacity:1}
+.nav .dot{width:5px;height:5px;border-radius:50%;background:var(--flag);opacity:0}
+
+.hero{background:var(--surface);border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+.hero canvas{display:block;width:100%;aspect-ratio:400/250;max-width:100%;background:var(--sky)}
+.hero-txt{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--fair)}
+.big{font-family:var(--display);font-weight:800;font-size:32px;line-height:1.05}
+.muted{color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column}
+.stat b{font-family:var(--display);font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.sec-h h2{font-size:24px;text-transform:uppercase;letter-spacing:.03em}
+.sec-h span{font-size:13px;color:var(--muted)}
+
+.cards{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:620px){.cards.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;text-align:left;width:100%}
+.card:active{transform:scale(.99)}
+.card .ic{flex:none;width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:var(--surface2);color:var(--fair)}
+.card .ic svg{width:34px;height:34px}
+.card .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.card .tx b{font-family:var(--display);font-size:21px;line-height:1.1;letter-spacing:.01em}
+.card .tx span{font-size:14px;color:var(--muted)}
+.card .go{flex:none;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--fair);display:flex;align-items:center;gap:4px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:var(--surface2);color:var(--fair);border:1px solid var(--line)}
+.badge.new{background:var(--flag);color:#fff;border-color:var(--flag);vertical-align:3px}
+.badge.done{background:var(--fair);color:var(--on-fair);border-color:var(--fair)}
+
+.check{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.check.is-done{background:var(--surface2)}
+.check.is-done .ct b{text-decoration:line-through;text-decoration-thickness:2px;color:var(--muted)}
+.box{flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--fair);background:var(--surface);display:grid;place-items:center;padding:0}
+.box svg{width:22px;height:22px;opacity:0}
+.is-done .box{background:var(--fair)}
+.is-done .box svg{opacity:1;color:var(--on-fair)}
+.ct{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.ct b{font-weight:600;font-size:17px;line-height:1.3}
+.ct .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.where{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.show{background:none;border:0;padding:0;color:var(--fair);font-weight:700;font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.score{display:flex;align-items:center;gap:8px;font-size:15px}
+.score input{width:84px;font:inherit;font-family:var(--display);font-size:22px;font-weight:700;padding:4px 8px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+
+.weeks{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.weeks::-webkit-scrollbar{display:none}
+.wk{flex:none;width:52px;height:60px;border-radius:12px;border:2px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0}
+.wk b{font-family:var(--display);font-size:22px;line-height:1}
+.wk span{font-size:11px;color:var(--muted);font-family:var(--display);letter-spacing:.06em;text-transform:uppercase}
+.wk[aria-pressed="true"]{border-color:var(--fair);background:var(--fair);color:var(--on-fair)}
+.wk[aria-pressed="true"] span{color:var(--on-fair)}
+.wk.full{border-color:var(--gold)}
+.phase{background:var(--fair-deep);color:var(--bg);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+:root:not([data-theme="light"]) .phase{color:var(--bg)}
+.phase b{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1.05}
+.prog{height:10px;border-radius:10px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--fair);transition:width .4s}
+
+.tip{background:var(--surface);border:2px dashed var(--line);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.tip svg{flex:none;width:30px;height:30px;color:var(--gold)}
+.tip p{margin:0}
+.cathead{display:flex;flex-direction:column;gap:6px}
+.cathead h1{font-size:40px;text-transform:uppercase;line-height:1}
+.cathead p{margin:0;color:var(--muted);max-width:60ch}
+.settings{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.pill-btn{border:2px solid var(--line);background:var(--surface);border-radius:30px;padding:6px 14px;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.pill-btn[aria-pressed="true"]{border-color:var(--fair);color:var(--fair)}
+.rounds{display:flex;align-items:flex-end;gap:6px;height:90px;padding-top:6px}
+.rounds div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%;min-width:0}
+.rounds i{display:block;width:100%;max-width:26px;border-radius:6px 6px 2px 2px;background:var(--fair)}
+.rounds i.empty{background:var(--line);height:4px}
+.rounds span{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rounds em{font-style:normal;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* Drill player */
+.player{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.player-in{width:100%;max-width:720px;margin:0 auto;padding-block:12px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;flex:1}
+.ph{display:flex;align-items:center;gap:10px}
+.ph h2{flex:1;font-size:28px;text-transform:uppercase;line-height:1.05;min-width:0}
+.x{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;padding:0}
+.x svg{width:22px;height:22px}
+.stage{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--sky)}
+.stage canvas{display:block;width:100%;aspect-ratio:400/250;max-width:100%}
+.need{font-size:14px;color:var(--muted)}
+.need b{color:var(--ink)}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--fair);width:26px;border-radius:10px}
+.steptxt{font-size:22px;line-height:1.35;font-weight:500;min-height:4.2em;margin:0}
+.stepnum{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.1em;text-transform:uppercase;color:var(--flag)}
+.ctrls{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:auto}
+.btn{border:0;border-radius:14px;padding:16px;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.05em;text-transform:uppercase}
+.btn.pri{background:var(--fair);color:var(--on-fair)}
+.btn.sec{background:var(--surface);border:2px solid var(--line)}
+.btn.win{background:var(--gold);color:#1d1600}
+.btn:disabled{opacity:.4;cursor:default}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:30;background:var(--ink);color:var(--bg);
+  padding:12px 20px;border-radius:30px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.sync{font-size:12px;color:var(--muted);text-align:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="top-in">
+  <div class="brand">Practice Tee<small id="sub">12-WEEK PLAN · WEEK 1</small></div>
+  <div class="lvl"><b id="lvlName">Range Rat</b><div class="xpbar"><i id="xpFill" style="width:0%"></i></div><span id="xpTxt">0 / 100 XP</span></div>
+</div></header>
+
+<main id="view"></main>
+
+<nav class="nav" aria-label="Sections"><div class="nav-in" id="nav"></div></nav>
+
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-labelledby="pTitle">
+  <div class="player-in">
+    <div class="ph"><h2 id="pTitle">Drill</h2><button class="x" id="pClose" aria-label="Close drill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="stage"><canvas id="pCanvas" width="800" height="500"></canvas></div>
+    <div class="need" id="pNeed"></div>
+    <div class="dots" id="pDots"></div>
+    <div><div class="stepnum" id="pNum">Step 1</div><p class="steptxt" id="pText"></p></div>
+    <div class="ctrls"><button class="btn sec" id="pBack">Back</button><button class="btn pri" id="pNext">Next</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ======================= CONTENT ======================= */
+const ICONS={
+ today:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 28V5l14 5-14 5"/><ellipse cx="16" cy="28" rx="10" ry="2.2"/></svg>',
+ swing:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="6" r="3"/><path d="M15 9v10l-4 9M15 19l5 9M15 12l-5 5 13-13"/></svg>',
+ long:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 26c6-16 16-20 26-20" stroke-dasharray="3 4"/><circle cx="4" cy="26" r="2.5" fill="currentColor"/><path d="M27 15V4l-5 2.5 5 2.5"/></svg>',
+ chip:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24c4-10 9-10 13 0h10" stroke-dasharray="3 3"/><circle cx="4" cy="24" r="2.5" fill="currentColor"/><path d="M26 24V10l-5 2.5 5 2.5"/><path d="M2 28h28"/></svg>',
+ putt:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="22" cy="23" rx="5" ry="2.4"/><circle cx="7" cy="22" r="2.5" fill="currentColor"/><path d="M11 22h6" stroke-dasharray="2 3"/><path d="M22 23V6l6 3-6 3"/></svg>',
+ plan:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="22" height="22" rx="3"/><path d="M5 12h22M11 3v6M21 3v6M10 19l3 3 6-6"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ bulb:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 24h8M13 28h6M16 4a8 8 0 0 0-5 14c1 1 1.5 2 1.5 3h7c0-1 .5-2 1.5-3A8 8 0 0 0 16 4z"/></svg>',
+ play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+};
+const TABS=[['today','Today'],['swing','Swing'],['long','Long'],['chip','Chip'],['putt','Putt'],['plan','Plan']];
+const CATS={
+ swing:{name:'Swing',desc:'How you hold it, how you stand, how you swing. Most of these work at home with one club and no ball.'},
+ long:{name:'Long Shots',desc:'Driver, woods and long irons. Take these to the driving range.'},
+ chip:{name:'Chipping',desc:'Little shots around the green. A practice green, a backyard or a park all work.'},
+ putt:{name:'Putting',desc:'All you need is a putter, a few balls and a couple of tees.'}
+};
+// scene helpers
+const G=(seq,o={})=>({k:'g',seq:Array.isArray(seq)?seq:[seq],...o});
+const GR=o=>({k:'gr',...o});
+const F=o=>({k:'f',...o});
+const R=o=>({k:'r',...o});
+const GP=n=>({k:'gp',stage:n});
+const FULL=['address','takeaway','top','down','impact','finish'];
+
+const DRILLS=[
+// ---------- SWING ----------
+{id:'s-grip',cat:'swing',name:'The Grip',min:5,where:'Home',need:'Any club',steps:[
+ ['Lay the grip across the base of the fingers on your lead hand (left hand for righties). Fingers, not palm.',GP(1)],
+ ['Close your lead hand. Look down: you should see 2 or 3 knuckles.',GP(2)],
+ ['The "V" between your thumb and first finger points at your trail shoulder.',GP(3)],
+ ['Trail hand goes below. Its palm covers your lead thumb. Pinkies overlap or interlock, whichever is comfy.',GP(4)],
+ ['Squeeze gently, about a 4 out of 10. Like holding a tube of toothpaste without squirting it.',GP(5)]]},
+{id:'s-setup',cat:'swing',name:'Setup & Posture',min:5,where:'Home',need:'Any club',steps:[
+ ['Feet about shoulder-width apart.',G('address',{hl:'feet',label:'Shoulder-width'})],
+ ['Bend forward from your hips, not your waist. Push your butt back a little.',G('address',{hl:'hips',label:'Hinge at hips'})],
+ ['Small knee flex. Like you are about to sit on a tall stool.',G('address',{hl:'knees',label:'Soft knees'})],
+ ['Let your arms hang straight down. Hands end up under your chin.',G('address',{hl:'hands',label:'Arms hang'})],
+ ['Ball in the middle for short irons. It moves toward your lead foot as clubs get longer.',G('address',{hl:'ball',label:'Ball position'})]]},
+{id:'s-align',cat:'swing',name:'Spare-Club Alignment',min:10,where:'Range',need:'2 extra clubs',steps:[
+ ['Pick a target. Stand behind your ball and look at it.',R({targets:[[200,46]],aim:true})],
+ ['Lay one spare club on the ground just past the ball, pointing at the target.',R({targets:[[200,46]],clubs:[[200,200,200,140]],aim:true})],
+ ['Lay a second club along your toes, parallel to the first. Like railroad tracks.',R({targets:[[200,46]],clubs:[[200,200,200,140],[160,250,160,180]]})],
+ ['Hit balls. Feet, hips and shoulders all match the club by your toes.',R({targets:[[200,46]],clubs:[[200,200,200,140],[160,250,160,180]],shots:[{to:[200,52]},{to:[188,60],c:-10},{to:[210,56],c:8}]})]]},
+{id:'s-takeaway',cat:'swing',name:'Low & Slow Takeaway',min:5,where:'Home',need:'Any club',steps:[
+ ['Start in your setup.',G('address',{hl:'hands'})],
+ ['Turn your chest and move hands, arms and club back together. Keep the clubhead low.',G(['address','takeaway'],{slow:3,hl:'club',label:'Low and slow'})],
+ ['Stop when the shaft is level with the ground. The toe of the club points at the sky.',G('takeaway',{hl:'club',label:'Toe up'})],
+ ['Do 10 slow takeaways in a mirror or window, then 10 slow full swings.',G(FULL,{slow:3})]]},
+{id:'s-turn',cat:'swing',name:'Turn to the Top',min:5,where:'Home',need:'Any club',steps:[
+ ['Your backswing is a turn. Your back ends up facing the target.',G(['address','takeaway','top'],{slow:2,hl:'shoulders',label:'Turn your back'})],
+ ['Lead shoulder ends under your chin. Wrists hinge so the club points over your head.',G('top',{hl:'hands',label:'Full turn'})],
+ ['Now unwind: hips first, then chest, then arms and club.',G(['top','down','impact','finish'],{slow:3,hl:'hips',label:'Hips start it'})],
+ ['Put it together. 10 smooth swings.',G(FULL)]]},
+{id:'s-pump',cat:'swing',name:'Pump Drill',min:10,where:'Range',need:'7 iron',steps:[
+ ['Swing to the top and stop.',G(['address','takeaway','top'])],
+ ['Start down until your hands are at hip height, then go back to the top. Do that twice.',G(['top','down','top','down','top'],{slow:2,hl:'hands',label:'Pump, pump'})],
+ ['The third time, keep going and hit the ball.',G(['top','down','top','down','impact','finish'],{ball:true,label:'Then hit it'})],
+ ['At impact, hands are a little ahead of the ball and your weight is moving to your lead foot.',G('impact',{hl:'hands',ball:true,label:'Hands ahead'})]]},
+{id:'s-finish',cat:'swing',name:'Hold the Finish',min:10,where:'Range',need:'Any iron',steps:[
+ ['Every swing ends here: chest faces the target, weight on lead foot, trail heel up.',G('finish',{hl:'feet',label:'Finish'})],
+ ['Hit a ball and freeze. Hold your finish while you count to 3.',G(FULL,{ball:true,label:'Hold 1-2-3'})],
+ ['Wobble or step? Swing slower. Balance first, power later.',G('finish',{hl:'head',label:'Stay balanced'})]]},
+{id:'s-feet',cat:'swing',name:'Feet-Together Drill',min:10,where:'Range',need:'7 or 8 iron',steps:[
+ ['Stand with your feet together, touching.',G('address',{stance:6,hl:'feet',label:'Feet together'})],
+ ['Make three-quarter swings. You can\'t sway, so you learn to turn in place.',G(['address','half','impact','through'],{stance:6,ball:true})],
+ ['Hit 10 like this, then 10 with your normal stance. Feel how solid it gets.',G(FULL,{ball:true})]]},
+{id:'s-towel',cat:'swing',name:'Towel Under Arms',min:10,where:'Home',need:'Small towel',steps:[
+ ['Tuck a small towel under both armpits.',G('address',{towel:true,hl:'shoulders',label:'Towel in'})],
+ ['Make half swings without dropping it. Arms and body move together.',G(['address','half','impact','through'],{towel:true,slow:1.5})],
+ ['Hit 10 balls with it, then 10 without.',G(['address','half','impact','through'],{towel:true,ball:true})]]},
+{id:'s-slowmo',cat:'swing',name:'Slow-Motion Swings',min:5,where:'Home',need:'Any club, no ball',steps:[
+ ['No ball needed. Swing in super slow motion, about 10 seconds start to finish.',G(FULL,{slow:5,label:'Slow motion'})],
+ ['Pause at each checkpoint for 2 seconds: takeaway, top, impact, finish.',G(['address','takeaway','takeaway','top','top','impact','impact','finish'],{slow:4})],
+ ['10 slow swings a day builds the right feel faster than hitting balls.',G(FULL,{slow:2})]]},
+// ---------- LONG ----------
+{id:'l-driver',cat:'long',name:'Driver Setup',min:15,where:'Range',need:'Driver, tees',steps:[
+ ['Tee it up so half the ball sits above the top of your driver.',G('address',{club:'driver',hl:'ball',label:'Tee height'})],
+ ['Stance a bit wider than your shoulders.',G('address',{club:'driver',stance:34,hl:'feet',label:'Wide stance'})],
+ ['Ball goes just inside your lead heel.',G('address',{club:'driver',stance:34,hl:'ball',label:'Off lead heel'})],
+ ['Swing smooth and sweep it off the tee, slightly upward.',G(FULL,{club:'driver',stance:34,ball:true})],
+ ['Hit 10. Count how many stay in an imaginary fairway.',R({targets:[[200,40]],shots:[{to:[200,50]},{to:[175,60],c:-25},{to:[220,58],c:25}]})]]},
+{id:'l-tempo',cat:'long',name:'3-to-1 Tempo',min:10,where:'Range',need:'Any club',steps:[
+ ['Good swings take about 3 times longer going back as coming down.',G(FULL,{ball:true,label:'Slow back, fast through'})],
+ ['Say "one, two, three" on the way back and "one" on the way down.',G(FULL,{ball:true,count:true})],
+ ['Hit 10 balls saying it in your head. Smooth beats hard.',G(FULL,{ball:true,count:true,club:'driver',stance:34})]]},
+{id:'l-ladder',cat:'long',name:'Half, ¾, Full',min:15,where:'Range',need:'7 iron',steps:[
+ ['Hit 5 balls with a half swing (hands to hip height). Watch where they land.',R({targets:[[200,150],[200,105],[200,60]],shots:[{to:[200,158]},{to:[194,152]}]})],
+ ['Hit 5 with a three-quarter swing (hands to shoulder height).',R({targets:[[200,150],[200,105],[200,60]],shots:[{to:[200,112]},{to:[206,108]}]})],
+ ['Hit 5 full swings. Now you know 3 distances with one club.',R({targets:[[200,150],[200,105],[200,60]],shots:[{to:[200,158]},{to:[200,112]},{to:[200,66]}]})]]},
+{id:'l-line',cat:'long',name:'Ball-Then-Turf',min:10,where:'Range (grass)',need:'Irons, 1 tee',steps:[
+ ['Push a tee into the ground 2 inches in front of the ball, toward the target.',G('address',{ball:true,teeAhead:true,hl:'ball',label:'Tee in front'})],
+ ['Hit the ball, then clip the tee. That means you hit down and through.',G(FULL,{ball:true,teeAhead:true})],
+ ['Your divot should start after the ball, never before it.',G('impact',{ball:true,teeAhead:true,hl:'club',label:'Ball first'})]]},
+{id:'l-wood',cat:'long',name:'Sweep the Fairway Wood',min:10,where:'Range',need:'Fairway wood or hybrid',steps:[
+ ['Ball a little forward of center. Stand slightly farther away than with an iron.',G('address',{club:'driver',ground:true,hl:'ball',label:'Ball forward'})],
+ ['Sweep it off the grass like you\'re brushing the top of the turf. No digging.',G(FULL,{club:'driver',ground:true,ball:true,label:'Sweep'})],
+ ['Tip: start with the ball on a very low tee, then move to the grass.',G('address',{club:'driver',hl:'ball',label:'Low tee first'})]]},
+{id:'l-fairway',cat:'long',name:'Fairway Game',min:15,where:'Range',need:'2 extra clubs',steps:[
+ ['Set up your railroad-track clubs at a target.',R({targets:[[200,46]],clubs:[[200,200,200,140],[160,250,160,180]],fairway:true})],
+ ['Hit 10 shots. 1 point for every ball inside an imaginary fairway 30 yards wide.',R({targets:[[200,46]],clubs:[[200,200,200,140],[160,250,160,180]],fairway:true,shots:[{to:[205,56]},{to:[150,70],c:-30},{to:[190,52],c:-6},{to:[256,64],c:34}]})],
+ ['Write your score down and beat it next time. 7 out of 10 is great.',R({targets:[[200,46]],fairway:true,shots:[{to:[205,56]},{to:[190,52],c:-6},{to:[214,60],c:10}]})]]},
+{id:'l-course',cat:'long',name:'Play a Course on the Range',min:20,where:'Range',need:'Your whole bag',steps:[
+ ['Pretend it\'s hole 1 at your course. Hit driver at a target like it\'s the fairway.',R({targets:[[200,40],[110,110],[290,140]],shots:[{to:[200,50]}]})],
+ ['Pick a new target. Hit the club you\'d use for your second shot.',R({targets:[[200,40],[110,110],[290,140]],shots:[{to:[116,118],c:-12}]})],
+ ['Full routine every ball: stand behind, pick a target, one practice swing, hit.',G(FULL,{ball:true,label:'Routine'})],
+ ['Play 9 "holes" this way. Practice that feels like real golf.',R({targets:[[200,40],[110,110],[290,140]],shots:[{to:[200,50]},{to:[116,118],c:-12},{to:[284,148],c:8}]})]]},
+// ---------- CHIP ----------
+{id:'c-setup',cat:'chip',name:'Basic Chip Setup',min:10,where:'Practice green',need:'Wedge',steps:[
+ ['Narrow stance. Feet closer than shoulder-width.',G('chipAddr',{stance:14,hl:'feet',label:'Narrow'})],
+ ['Lean most of your weight (about 70%) on your lead foot.',G('chipAddr',{stance:14,hl:'hips',label:'Weight forward'})],
+ ['Ball slightly back of center. Hands just ahead of the ball.',G('chipAddr',{stance:14,hl:'hands',ball:true,label:'Hands ahead'})],
+ ['Rock your shoulders back and through. Quiet wrists, like a long putt.',G(['chipAddr','chipBack','chipThru'],{stance:14,ball:true,shot:'chip'})]]},
+{id:'c-towel',cat:'chip',name:'Towel Landing Spot',min:15,where:'Practice green',need:'Towel, wedge',steps:[
+ ['Lay a towel 3 steps onto the green. That\'s your landing spot.',F({towel:255,flag:345})],
+ ['Chip so the ball lands on the towel and rolls to the hole.',F({towel:255,flag:345,shots:[{land:255,stop:338,h:55,lbl:'Wedge'}]})],
+ ['Hit 10. Count how many land on the towel. Beat that number next time.',F({towel:255,flag:345,shots:[{land:255,stop:338,h:55},{land:238,stop:310,h:50},{land:262,stop:352,h:58}]})]]},
+{id:'c-ladder',cat:'chip',name:'Chipping Ladder',min:15,where:'Practice green',need:'1 wedge, 3 balls',steps:[
+ ['Same club. Chip one ball short, one medium, one long.',F({flag:380,shots:[{land:225,stop:260,h:40,lbl:'Short'},{land:250,stop:310,h:52,lbl:'Medium'},{land:275,stop:360,h:64,lbl:'Long'}]})],
+ ['Change distance with a bigger or smaller swing. Never by hitting harder.',G(['chipAddr','chipBack','chipThru','chipAddr','p730','chipThru'],{stance:14,ball:true,shot:'chip',label:'Small swing, bigger swing'})],
+ ['Then go back down: long, medium, short. Do the ladder 3 times.',F({flag:380,shots:[{land:275,stop:360,h:64,lbl:'Long'},{land:250,stop:310,h:52,lbl:'Medium'},{land:225,stop:260,h:40,lbl:'Short'}]})]]},
+{id:'c-clock',cat:'chip',name:'Clock-Face Pitches',min:15,where:'Range or green',need:'Wedge',steps:[
+ ['Picture yourself as a clock. Your head is 12 o\'clock.',G('address',{hl:'head',clock:true,label:'You are a clock'})],
+ ['Small: lead arm back to 7:30. Short pitch.',G(['address','p730','impact','through'],{clock:true,ball:true,shot:'chip',label:'7:30'})],
+ ['Medium: lead arm back to 9:00, level with the ground.',G(['address','p9','impact','through'],{clock:true,ball:true,shot:'pitch',label:'9:00'})],
+ ['Big: lead arm to 10:30. Learn how far each one goes with your wedge.',G(['address','p1030','impact','finish'],{clock:true,ball:true,shot:'pitch',label:'10:30'})]]},
+{id:'c-clubs',cat:'chip',name:'One Stroke, Three Clubs',min:15,where:'Practice green',need:'Wedge, 9 iron, 7 iron',steps:[
+ ['Chip with your pitching wedge. About half air, half roll.',F({flag:370,shots:[{land:220,stop:362,h:60,lbl:'Wedge'}]})],
+ ['Same stroke with a 9 iron. Less air, more roll.',F({flag:370,shots:[{land:190,stop:364,h:42,lbl:'9 iron'}]})],
+ ['Same stroke with a 7 iron. Low and runs most of the way.',F({flag:370,shots:[{land:160,stop:366,h:28,lbl:'7 iron'}]})],
+ ['Pick the club that lands it just on the green and rolls the rest.',F({flag:370,shots:[{land:220,stop:362,h:60,lbl:'Wedge'},{land:190,stop:364,h:42,lbl:'9 iron'},{land:160,stop:366,h:28,lbl:'7 iron'}]})]]},
+{id:'c-tee',cat:'chip',name:'Tee Behind the Ball',min:10,where:'Practice green',need:'Wedge, 1 tee',steps:[
+ ['Push a tee into the ground about 2 inches behind the ball.',G('chipAddr',{stance:14,ball:true,teeBehind:true,hl:'ball',label:'Tee behind'})],
+ ['Chip without touching the tee. Hit it? That would have been a chunk.',G(['chipAddr','chipBack','chipThru'],{stance:14,ball:true,teeBehind:true,shot:'chip'})],
+ ['Weight forward, hands ahead, and you\'ll miss the tee every time.',G('chipAddr',{stance:14,ball:true,teeBehind:true,hl:'hands',label:'Hands ahead'})]]},
+{id:'c-updown',cat:'chip',name:'Up-and-Down Game',min:20,where:'Practice green',need:'Wedge, putter, 9 balls',steps:[
+ ['Drop 9 balls around the green in different spots.',GR({hole:[230,120],edge:true,balls:[[40,40],[30,140],[60,226],[200,236],[360,224],[372,110],[350,26],[200,14],[120,230]]})],
+ ['Chip each one, then putt it in. Count every stroke.',GR({hole:[230,120],edge:true,balls:[[30,140],[60,226],[200,236],[360,224],[372,110],[350,26],[200,14],[120,230]],rolls:[{f:[40,40],to:[212,106]},{f:[212,106],to:[230,120],inn:true}]})],
+ ['Par is 18 (2 per ball). Write your score and beat it next time.',GR({hole:[230,120],edge:true,rolls:[{f:[30,140],to:[214,128]},{f:[214,128],to:[230,120],inn:true}],label:'Par 18'})]]},
+// ---------- PUTT ----------
+{id:'p-setup',cat:'putt',name:'Putting Setup',min:5,where:'Home or green',need:'Putter',steps:[
+ ['Eyes right over the ball. Bend from your hips until they are.',G('puttAddr',{club:'putter',stance:16,ball:true,hl:'head',label:'Eyes over ball'})],
+ ['Arms hang. Grip pressure soft.',G('puttAddr',{club:'putter',stance:16,ball:true,hl:'hands',label:'Soft hands'})],
+ ['Rock your shoulders like a seesaw. Wrists stay still. Same size back and through.',G(['puttAddr','puttBack','puttThru'],{club:'putter',stance:16,ball:true,shot:'putt',label:'Seesaw'})]]},
+{id:'p-gate',cat:'putt',name:'Tee Gate Drill',min:10,where:'Practice green',need:'Putter, 2 tees',steps:[
+ ['Push 2 tees into the green just wider than your putter head. Ball sits between them.',GR({hole:[330,125],tees:[[96,102],[96,148]],balls:[[110,125]],putterAt:[110,125],label:'Gate for putter'})],
+ ['Putt from 4 feet. The putter swings through without touching a tee.',GR({hole:[330,125],tees:[[96,102],[96,148]],rolls:[{f:[110,125],to:[330,125],inn:true}]})],
+ ['Make 10. Hit a tee? Your stroke went off line.',GR({hole:[330,125],tees:[[96,102],[96,148]],rolls:[{f:[110,125],to:[330,125],inn:true},{f:[110,125],to:[330,125],inn:true}],label:'10 in'})]]},
+{id:'p-start',cat:'putt',name:'Start-Line Gate',min:10,where:'Practice green',need:'Putter, 2 tees',steps:[
+ ['Put 2 tees 1 foot in front of your ball, a little wider than a ball apart.',GR({hole:[340,125],tees:[[160,115],[160,135]],balls:[[100,125]],aim:true,label:'1 ft gate'})],
+ ['Roll the ball through the gate. It trains your putter face to be square.',GR({hole:[340,125],tees:[[160,115],[160,135]],rolls:[{f:[100,125],to:[340,125],inn:true}]})],
+ ['Do 20. Easy? Move the tees closer together.',GR({hole:[340,125],tees:[[160,117],[160,133]],rolls:[{f:[100,125],to:[340,125],inn:true},{f:[100,125],to:[340,125],inn:true}]})]]},
+{id:'p-ladder',cat:'putt',name:'Lag Ladder',min:15,where:'Practice green',need:'Putter, 3 tees, 3 balls',steps:[
+ ['Push tees in at 20, 30 and 40 feet.',GR({tees:[[160,125],[250,125],[340,125]],balls:[[50,125]],labels:[[160,100,'20 ft'],[250,100,'30 ft'],[340,100,'40 ft']]})],
+ ['Putt one ball to each tee. Try to stop it within one club length of the tee.',GR({tees:[[160,125],[250,125],[340,125]],labels:[[160,100,'20 ft'],[250,100,'30 ft'],[340,100,'40 ft']],rolls:[{f:[50,130],to:[168,130]},{f:[50,125],to:[244,125]},{f:[50,120],to:[346,120]}]})],
+ ['Then go back to 20. This trains your speed, which stops 3-putts.',GR({tees:[[160,125],[250,125],[340,125]],labels:[[160,100,'20 ft'],[250,100,'30 ft'],[340,100,'40 ft']],rolls:[{f:[50,120],to:[338,120]},{f:[50,125],to:[254,125]},{f:[50,130],to:[163,130]}]})]]},
+{id:'p-clock',cat:'putt',name:'Around the Clock',min:10,where:'Practice green',need:'Putter, 4 balls',steps:[
+ ['Put 4 balls around the hole, each 3 feet away: 12, 3, 6 and 9 o\'clock.',GR({hole:[200,125],ring:62,balls:[[200,63],[262,125],[200,187],[138,125]],labels:[[290,70,'3 ft']]})],
+ ['Make all 4. Miss one? Start over.',GR({hole:[200,125],ring:62,rolls:[{f:[200,63],to:[200,125],inn:true},{f:[262,125],to:[200,125],inn:true},{f:[200,187],to:[200,125],inn:true},{f:[138,125],to:[200,125],inn:true}]})],
+ ['Made all 4? Move back to 4 feet, then 5 feet.',GR({hole:[200,125],ring:92,balls:[[200,33],[292,125],[200,217],[108,125]],labels:[[318,58,'5 ft']]})]]},
+{id:'p-past',cat:'putt',name:'Past-the-Hole Drill',min:10,where:'Practice green',need:'Putter, 1 spare club',steps:[
+ ['Lay a club on the green 18 inches behind the hole.',GR({hole:[300,125],clubs:[[340,80,340,170]],balls:[[40,125]],labels:[[320,62,'18 in']]})],
+ ['Putt from 15 feet. Every ball must finish past the hole but short of the club.',GR({hole:[300,125],clubs:[[340,80,340,170]],rolls:[{f:[40,125],to:[322,128]},{f:[40,125],to:[300,125],inn:true},{f:[40,125],to:[318,118]}]})],
+ ['Firm speed means your misses leave easy tap-ins.',GR({hole:[300,125],clubs:[[340,80,340,170]],balls:[[322,128],[318,118]],label:'Tap-ins'})]]},
+{id:'p-ten',cat:'putt',name:'10 in a Row',min:10,where:'Practice green',need:'Putter, 3 balls',steps:[
+ ['Pick a straight 3-foot putt.',GR({hole:[260,125],balls:[[150,125]],labels:[[205,100,'3 ft']],aim:true})],
+ ['Make 10 in a row. Miss one and you start over at zero.',GR({hole:[260,125],rolls:[{f:[150,125],to:[260,125],inn:true},{f:[150,125],to:[260,125],inn:true},{f:[150,125],to:[260,125],inn:true}],count:true})],
+ ['This builds confidence for the short ones that count.',GR({hole:[260,125],rolls:[{f:[150,125],to:[260,125],inn:true}],label:'Money putts'})]]},
+{id:'p-onehand',cat:'putt',name:'Trail-Hand Only',min:10,where:'Practice green',need:'Putter',steps:[
+ ['Hold the putter with just your trail hand.',G('puttAddr',{club:'putter',stance:16,ball:true,hl:'hands',label:'One hand'})],
+ ['Make 10 putts from 3 feet. Let the putter swing like a pendulum.',G(['puttAddr','puttBack','puttThru'],{club:'putter',stance:16,ball:true,shot:'putt'})],
+ ['Add your other hand back and keep the same feel.',G(['puttAddr','puttBack','puttThru'],{club:'putter',stance:16,ball:true,shot:'putt',label:'Same feel'})]]}
+];
+const BY=Object.fromEntries(DRILLS.map(d=>[d.id,d]));
+// Extra drills arrive from the shared "drills" collection (added every couple of days)
+function setExtras(docs){
+  for(let i=DRILLS.length-1;i>=0;i--)if(DRILLS[i].extra){delete BY[DRILLS[i].id];DRILLS.splice(i,1)}
+  docs.forEach(doc=>{try{const d=doc.data();if(!d||!CATS[d.cat]||!Array.isArray(d.steps)||!d.steps.length)return;
+    const steps=d.steps.map(s=>{const sc=s&&s.s;if(!sc||typeof s.t!=='string'||!SCENE_KINDS.includes(sc.k))throw 0;
+      if(sc.k==='g'){sc.seq=(Array.isArray(sc.seq)?sc.seq:[sc.seq]).filter(p=>POSE_NAMES.includes(p));if(!sc.seq.length)sc.seq=['address']}
+      return [s.t,sc]});
+    const dr={id:'x-'+doc.id,cat:d.cat,name:String(d.name||'New drill'),min:+d.min||10,where:String(d.where||'Range'),need:String(d.need||'Clubs and balls'),steps,added:String(d.added||''),extra:true};
+    DRILLS.push(dr);BY[dr.id]=dr}catch(e){}});
+}
+const SCENE_KINDS=['g','gr','f','r','gp'];
+const POSE_NAMES=['address','takeaway','half','top','down','impact','through','finish','chipAddr','chipBack','chipThru','puttAddr','puttBack','puttThru','p730','p9','p1030'];
+const isNew=d=>d.added&&(dayNum(today())-dayNum(d.added))<=4;
+
+const TIPS=[
+ 'Practice short game more than driver. About half your shots in a round are within 100 yards.',
+ 'Before every shot, pick a small target. "Left side of the green" is better than "the green".',
+ 'Grip pressure creeps up when you\'re nervous. Check it on the first tee: about a 4 out of 10.',
+ 'On long putts, think speed, not line. Most 3-putts come from bad speed.',
+ 'Warm up with a wedge, not a driver. Start small, build up.',
+ 'Hold your finish on every range ball. It tells you if you were in balance.',
+ 'When chipping, get the ball rolling as soon as you can. Rolling is easier to control than flying.',
+ 'A practice swing should look exactly like your real swing. Same speed, same size.',
+ 'Aim your clubface first, then set your feet. Not the other way around.',
+ 'Count your putts every round. Under 36 is good. Under 32 is excellent.',
+ 'Range buckets go fast. Hit one ball every 30 seconds and actually pick a target each time.',
+ 'Under pressure, breathe out slowly before you swing. It loosens your arms.',
+ 'On the course, play the club that gets you to the middle of the green, not the flag.',
+ 'If you top the ball, you\'re probably standing up too early. Stay in your posture through impact.',
+ 'Slicing? Check your grip. Weak grips (too few knuckles showing) open the clubface.',
+ 'Mark your ball with a line and use it to aim putts.',
+ 'Short on time? 10 minutes of putting at home beats skipping practice.',
+ 'Track fairways hit, greens hit and putts. Your weakest number tells you what to practice.',
+ 'Tee shots on short par 4s: hit the club that keeps you in the fairway, even if it\'s not driver.',
+ 'Look at the hole, not the ball, on a few practice putts. It improves your feel for distance.'
+];
+
+const PHASES=[
+ {w:[1,2,3],name:'Foundations',txt:'Grip, setup, and a simple putting and chipping motion. Build habits before power.'},
+ {w:[4,5,6],name:'Short Game',txt:'Most strokes are lost near the green. Chipping and putting get the extra time.'},
+ {w:[7,8,9],name:'Long Game',txt:'Driver, woods and irons. Solid contact and hitting it where you aim.'},
+ {w:[10,11,12],name:'Scoring',txt:'Pressure games and course practice. Turn practice into lower scores.'}
+];
+// task: [text, where, drillId|null, type]
+const PLAN={
+1:[['Learn the grip and setup (10 min, 3 days)','Home','s-grip'],['10 slow-motion swings, 3 days this week','Home','s-slowmo'],['Putting setup + Tee Gate drill (20 min)','Green','p-gate'],['Basic chip setup (15 min)','Green','c-setup'],['Small bucket with spare-club alignment','Range','s-align'],['Play 9 or 18 holes. Write your score.','Course',null,'play']],
+2:[['Setup & posture check in a mirror (10 min)','Home','s-setup'],['Low & slow takeaway, 3 days','Home','s-takeaway'],['Around-the-Clock putting (15 min)','Green','p-clock'],['Tee Behind the Ball chipping (15 min)','Green','c-tee'],['Small bucket: Hold the Finish on every ball','Range','s-finish'],['Play a round. Write your score.','Course',null,'play']],
+3:[['Turn to the Top, 3 days','Home','s-turn'],['Towel Under Arms (10 min)','Home','s-towel'],['Start-Line Gate putting (15 min)','Green','p-start'],['Towel Landing Spot chipping (15 min)','Green','c-towel'],['Medium bucket: Feet-Together drill then normal','Range','s-feet'],['Play a round. Count your putts too.','Course',null,'play']],
+4:[['Slow-motion swings, 3 days','Home','s-slowmo'],['Chipping Ladder (20 min)','Green','c-ladder'],['One Stroke, Three Clubs (15 min)','Green','c-clubs'],['Lag Ladder putting (20 min)','Green','p-ladder'],['Small bucket: Pump Drill','Range','s-pump'],['Play a round. Write your score.','Course',null,'play']],
+5:[['Clock-Face Pitches: 7:30, 9:00, 10:30 (20 min)','Range','c-clock'],['Past-the-Hole putting (15 min)','Green','p-past'],['Up-and-Down Game. Write your score out of 18.','Green','c-updown'],['Trail-Hand Only putting (10 min)','Green','p-onehand'],['Small bucket: 3-to-1 Tempo','Range','l-tempo'],['Play a round. Write your score.','Course',null,'play']],
+6:[['Up-and-Down Game. Beat last week.','Green','c-updown'],['10 in a Row from 3 feet','Green','p-ten'],['Towel Landing Spot (15 min)','Green','c-towel'],['Lag Ladder putting (15 min)','Green','p-ladder'],['Medium bucket: Half, ¾, Full with 7 iron','Range','l-ladder'],['Play a round. Count putts.','Course',null,'play']],
+7:[['Driver Setup, then 20 drivers','Range','l-driver'],['3-to-1 Tempo with driver','Range','l-tempo'],['Feet-Together drill (10 balls)','Range','s-feet'],['Around-the-Clock putting (10 min)','Green','p-clock'],['Slow-motion swings, 2 days','Home','s-slowmo'],['Play a round. Count fairways hit.','Course',null,'play']],
+8:[['Ball-Then-Turf with irons (20 balls)','Range','l-line'],['Sweep the Fairway Wood (15 balls)','Range','l-wood'],['Half, ¾, Full with 7 iron','Range','l-ladder'],['Tee Behind the Ball chipping (10 min)','Green','c-tee'],['Start-Line Gate putting (10 min)','Green','p-start'],['Play a round. Write your score.','Course',null,'play']],
+9:[['Fairway Game. Write your score out of 10.','Range','l-fairway'],['Pump Drill (10 balls)','Range','s-pump'],['Driver: 10 balls, Hold the Finish','Range','s-finish'],['Chipping Ladder (15 min)','Green','c-ladder'],['Past-the-Hole putting (10 min)','Green','p-past'],['Play a round. Write your score.','Course',null,'play']],
+10:[['Play a Course on the Range (9 "holes")','Range','l-course'],['Up-and-Down Game. New best?','Green','c-updown'],['10 in a Row from 3 feet','Green','p-ten'],['Lag Ladder (15 min)','Green','p-ladder'],['Grip & setup check (5 min)','Home','s-grip'],['Play a round. Score, putts, fairways.','Course',null,'play']],
+11:[['Fairway Game. Beat your score.','Range','l-fairway'],['One Stroke, Three Clubs (15 min)','Green','c-clubs'],['Around the Clock out to 5 feet','Green','p-clock'],['Clock-Face Pitches (15 min)','Range','c-clock'],['Slow-motion swings, 2 days','Home','s-slowmo'],['Play a round. Write your score.','Course',null,'play']],
+12:[['Play a Course on the Range (full 9)','Range','l-course'],['Up-and-Down Game: final score','Green','c-updown'],['10 in a Row: can you do 15?','Green','p-ten'],['Towel Landing Spot (10 min)','Green','c-towel'],['Driver Setup + 3-to-1 Tempo (20 balls)','Range','l-tempo'],['Final round! Compare to week 1.','Course',null,'play']]
+};
+const LEVELS=['Range Rat','Weekend Hacker','Bogey Hunter','Fairway Finder','Green Reader','Par Saver','Birdie Maker','Club Champ','Scratch Legend'];
+
+/* ======================= STATE ======================= */
+const LS='practice-tee-v1';
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let S={start:today(),tasks:{},drills:{},days:{},scores:{},lefty:false,updated:0};
+try{const raw=localStorage.getItem(LS);if(raw){S={...S,...JSON.parse(raw)}}}catch(e){}
+let ref=null,writing=false,again=false,saveT=null,synced=false;
+function save(){S.updated=Date.now();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
+  clearTimeout(saveT);saveT=setTimeout(flush,600)}
+async function flush(){if(!ref)return;if(writing){again=true;return}writing=true;
+  try{await ref.set({state:JSON.parse(JSON.stringify(S))});synced=true}catch(e){}
+  writing=false;if(again){again=false;flush()}renderSync()}
+fetch('drills.json',{cache:'no-cache'}).then(r=>r.ok?r.json():[]).then(list=>{setExtras((Array.isArray(list)?list:[]).map(d=>({id:d.id,data:()=>JSON.parse(JSON.stringify(d))})));if($('#player').hidden)render()}).catch(()=>{});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+const dayNum=s=>Math.floor(new Date(s+'T12:00:00').getTime()/864e5);
+function curWeek(){return Math.max(1,Math.min(12,Math.floor((dayNum(today())-dayNum(S.start))/7)+1))}
+function xp(){let x=0;for(const k in S.tasks)if(S.tasks[k])x+=10;for(const k in S.drills)x+=5*S.drills[k];return x}
+function streak(){let n=0,d=dayNum(today());if(!S.days[fmt(d)])d--;while(S.days[fmt(d)]){n++;d--}return n}
+function fmt(n){const d=new Date(n*864e5);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0')}
+function bump(){const t=today();S.days[t]=(S.days[t]||0)+1}
+function weekDone(w){return PLAN[w].filter((_,i)=>S.tasks['w'+w+'-'+i]).length}
+
+/* ======================= UI ======================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tab='today',planWeek=null;
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),1600)}
+function renderTop(){const x=xp(),lv=Math.min(LEVELS.length-1,Math.floor(x/100));
+  $('#lvlName').textContent=LEVELS[lv];$('#xpFill').style.width=(lv===LEVELS.length-1?100:(x%100))+'%';
+  $('#xpTxt').textContent=lv===LEVELS.length-1?x+' XP':(x%100)+' / 100 XP';$('#sub').textContent='12-week plan · Week '+curWeek()}
+function renderNav(){$('#nav').innerHTML=TABS.map(([k,l])=>`<button data-tab="${k}" ${tab===k?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span><i class="dot"></i></button>`).join('')}
+function renderSync(){const el=$('#syncNote');if(el)el.textContent='Your progress is saved on this phone'}
+
+function drillCard(d){const n=S.drills[d.id]||0;
+  return `<button class="card" data-drill="${d.id}"><span class="ic">${ICONS[d.cat]}</span><span class="tx"><b>${isNew(d)?'<span class="badge new">New</span> ':''}${esc(d.name)}</b><span>${d.min} min · ${esc(d.where)} · ${esc(d.need)}</span></span>
+  <span class="go">${n?`<span class="badge done">${ICONS.check.replace('<svg','<svg width="14" height="14"')} ${n}×</span>`:'Show me'}</span></button>`}
+function taskRow(w,i,t){const k='w'+w+'-'+i,on=!!S.tasks[k],d=t[2]&&BY[t[2]];
+  return `<div class="check ${on?'is-done':''}"><button class="box" data-task="${k}" aria-pressed="${on}" aria-label="Mark done: ${esc(t[0])}">${ICONS.check}</button>
+  <div class="ct"><b>${esc(t[0])}</b><div class="row"><span class="where">${esc(t[1])}</span>${d?`<button class="show" data-drill="${d.id}">Show me how</button>`:''}
+  ${t[3]==='play'?`<label class="score">Score <input id="score-${w}" data-score="${w}" type="number" inputmode="numeric" min="18" max="200" placeholder="—" value="${S.scores[w]??''}"></label>`:''}</div></div></div>`}
+
+function render(){renderTop();renderNav();const v=$('#view');stopAnims(v);
+  if(tab==='today')v.innerHTML=viewToday();
+  else if(tab==='plan')v.innerHTML=viewPlan();
+  else v.innerHTML=viewCat(tab);
+  const hc=v.querySelector('canvas[data-hero]');if(hc)startAnim(hc,G(FULL,{ball:true,club:'driver',stance:34,shot:'full',hero:true}));
+  renderSync();
+}
+function viewToday(){const w=curWeek(),dn=dayNum(today());
+  const pick=(cat,o)=>{const l=DRILLS.filter(d=>d.cat===cat);return l[(dn+o)%l.length]};
+  const todays=[pick('swing',0),dn%2?pick('long',1):pick('chip',2),pick('putt',3)];
+  const done=weekDone(w),tot=PLAN[w].length;
+  return `<section class="hero"><canvas data-hero width="800" height="500" aria-label="Animated golfer swinging a driver"></canvas>
+   <div class="hero-txt"><span class="eyebrow">Week ${w} of 12 · ${phaseOf(w).name}</span><span class="big">${done===tot?'Week complete. Nice work!':`${tot-done} thing${tot-done===1?'':'s'} left this week`}</span>
+   <div class="prog"><i style="width:${done/tot*100}%"></i></div></div></section>
+  <div class="stats"><div class="stat"><b>${xp()}</b><span>XP earned</span></div><div class="stat"><b>${streak()}</b><span>Day streak</span></div><div class="stat"><b>${Object.values(S.drills).reduce((a,b)=>a+b,0)}</b><span>Drills done</span></div></div>
+  ${(()=>{const nw=DRILLS.filter(isNew).sort((a,b)=>b.added.localeCompare(a.added));return nw.length?`<section class="sec"><div class="sec-h"><h2>Just added</h2><span>New drills every 2 days</span></div><div class="cards">${nw.map(drillCard).join('')}</div></section>`:''})()}
+  <section class="sec"><div class="sec-h"><h2>Today's 3 drills</h2><span>New picks every day</span></div><div class="cards">${todays.map(drillCard).join('')}</div></section>
+  <div class="tip">${ICONS.bulb}<p><b>Tip of the day.</b> ${esc(TIPS[dn%TIPS.length])}</p></div>
+  <section class="sec"><div class="sec-h"><h2>This week</h2><span>${done} of ${tot} done · +10 XP each</span></div>${PLAN[w].map((t,i)=>taskRow(w,i,t)).join('')}</section>
+  <p class="sync" id="syncNote"></p>`}
+function phaseOf(w){return PHASES.find(p=>p.w.includes(w))}
+function viewCat(c){const C=CATS[c];
+  return `<div class="cathead"><span class="eyebrow">${DRILLS.filter(d=>d.cat===c).length} drills · tap one to watch it</span><h1>${C.name}</h1><p>${C.desc}</p></div>
+  <div class="cards two">${DRILLS.filter(d=>d.cat===c).sort((a,b)=>(isNew(b)?1:0)-(isNew(a)?1:0)).map(drillCard).join('')}</div>
+  <div class="settings">Animations show a right-handed golfer. <button class="pill-btn" id="lefty" aria-pressed="${!!S.lefty}">${S.lefty?'Left-handed: on':'I\'m left-handed'}</button></div>`}
+function viewPlan(){const cw=curWeek(),w=planWeek||cw,p=phaseOf(w),done=weekDone(w),tot=PLAN[w].length;
+  const sc=Object.keys(PLAN).map(Number);const vals=sc.map(k=>+S.scores[k]||0).filter(Boolean);const mx=Math.max(...vals,1),mn=Math.min(...vals,mx);
+  return `<div class="cathead"><span class="eyebrow">Started ${new Date(S.start+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'})} · you're on week ${cw}</span><h1>12-Week Plan</h1></div>
+  <div class="weeks" role="group" aria-label="Pick a week">${sc.map(k=>`<button class="wk ${weekDone(k)===PLAN[k].length?'full':''}" data-week="${k}" aria-pressed="${k===w}"><b>${k}</b><span>${k===cw?'Now':weekDone(k)+'/'+PLAN[k].length}</span></button>`).join('')}</div>
+  <div class="phase"><span class="eyebrow" style="color:var(--gold)">Weeks ${p.w[0]}–${p.w[2]}</span><b>${p.name}</b><span>${p.txt}</span></div>
+  <section class="sec"><div class="sec-h"><h2>Week ${w}</h2><span>${done} of ${tot} done</span></div><div class="prog"><i style="width:${done/tot*100}%"></i></div>
+  ${PLAN[w].map((t,i)=>taskRow(w,i,t)).join('')}</section>
+  <section class="sec"><div class="sec-h"><h2>Your rounds</h2><span>${vals.length?'Best: '+Math.min(...vals):'Add a score after you play'}</span></div>
+  <div class="rounds">${sc.map(k=>{const s=+S.scores[k];return `<div>${s?`<em>${s}</em><i style="height:${20+60*(mx===mn?1:(mx-s)/(mx-mn)*.8+.2)}%"></i>`:'<i class="empty"></i>'}<span>W${k}</span></div>`}).join('')}</div>
+  <span class="muted" style="font-size:13px">Taller bar = lower score. Lower is better.</span></section>
+  <p class="sync" id="syncNote"></p>`}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;planWeek=null;location.hash=tab;render();window.scrollTo(0,0);return}
+  const d=e.target.closest('[data-drill]');if(d){openDrill(d.dataset.drill);return}
+  const k=e.target.closest('[data-task]');if(k){const key=k.dataset.task;S.tasks[key]=!S.tasks[key];if(S.tasks[key]){bump();toast(['Nice!','Boom!','Great shot!','In the hole!'][Math.floor(Math.random()*4)]+' +10 XP')}save();render();return}
+  const w=e.target.closest('[data-week]');if(w){planWeek=+w.dataset.week;render();return}
+  if(e.target.closest('#lefty')){S.lefty=!S.lefty;save();render();return}
+});
+document.addEventListener('change',e=>{const s=e.target.closest('[data-score]');if(s){const v=parseInt(s.value,10);if(v>0)S.scores[s.dataset.score]=v;else delete S.scores[s.dataset.score];save();render()}});
+function fromHash(){const h=location.hash.slice(1);if(TABS.some(t=>t[0]===h))tab=h}
+window.addEventListener('hashchange',()=>{fromHash();render()});
+
+/* ---------- player ---------- */
+let cur=null,step=0;
+function openDrill(id){cur=BY[id];step=0;$('#player').hidden=false;document.body.style.overflow='hidden';$('#pTitle').textContent=cur.name;
+  $('#pNeed').innerHTML=`<b>You need:</b> ${esc(cur.need)} · <b>Where:</b> ${esc(cur.where)} · <b>Time:</b> ${cur.min} min`;showStep();$('#pNext').focus()}
+function closeDrill(){$('#player').hidden=true;document.body.style.overflow='';stopAnim($('#pCanvas'));cur=null;render()}
+function showStep(){const n=cur.steps.length,[txt,sc]=cur.steps[step];
+  $('#pNum').textContent='Step '+(step+1)+' of '+n;$('#pText').textContent=txt;
+  $('#pDots').innerHTML=cur.steps.map((_,i)=>`<i class="${i===step?'on':''}"></i>`).join('');
+  $('#pBack').disabled=step===0;const last=step===n-1,nb=$('#pNext');
+  nb.textContent=last?'I did it! +5 XP':'Next';nb.className='btn '+(last?'win':'pri');
+  startAnim($('#pCanvas'),sc)}
+$('#pBack').onclick=()=>{if(step>0){step--;showStep()}};
+$('#pNext').onclick=()=>{if(step<cur.steps.length-1){step++;showStep()}else{S.drills[cur.id]=(S.drills[cur.id]||0)+1;bump();save();toast('Drill done! +5 XP');closeDrill()}};
+$('#pClose').onclick=closeDrill;
+document.addEventListener('keydown',e=>{if($('#player').hidden)return;if(e.key==='Escape')closeDrill();if(e.key==='ArrowRight')$('#pNext').click();if(e.key==='ArrowLeft')$('#pBack').click()});
+
+/* ======================= ANIMATION ENGINE ======================= */
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches?0.5:1;
+const anims=new Map();
+function startAnim(cv,spec){anims.set(cv,{spec,t0:performance.now(),st:{}});if(!startAnim.on){startAnim.on=1;requestAnimationFrame(loop)}}
+function stopAnim(cv){anims.delete(cv)}
+function stopAnims(root){for(const cv of anims.keys())if(root.contains(cv))anims.delete(cv)}
+let COL={},colT=-1e9;
+function cols(now){if(now-colT>1000){colT=now;const cs=getComputedStyle(document.documentElement);
+  for(const k of ['turf','turf2','putt','putt2','soil','sky','skin','shirt','pants','cap','steel','grip','ball','hole','flag','gold','sand','ink','muted','surface','fair','line','bg'])COL[k]=cs.getPropertyValue('--'+k).trim()}return COL}
+function loop(now){cols(now);
+  for(const [cv,a] of anims){if(!cv.isConnected){anims.delete(cv);continue}
+    const r=cv.getBoundingClientRect();if(!r.width)continue;const dpr=Math.min(2,devicePixelRatio||1),W=Math.round(r.width*dpr),H=Math.round(r.width*dpr*250/400);
+    if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+    const ctx=cv.getContext('2d');ctx.setTransform(W/400,0,0,H/250,0,0);
+    const t=(now-a.t0)/1000*RM;
+    try{SCENES[a.spec.k](ctx,t,a.spec,a.st)}catch(e){console.error(e)}}
+  requestAnimationFrame(loop)}
+const ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+const lerp=(a,b,u)=>a+(b-a)*u;
+const rad=d=>d*Math.PI/180;
+const dir=d=>[-Math.sin(rad(d)),Math.cos(rad(d))];
+let MIR=false;
+function mirror(ctx,on){MIR=on;if(on){ctx.translate(400,0);ctx.scale(-1,1)}}
+function label(ctx,x,y,text,o={}){ctx.save();ctx.setTransform(ctx.getTransform());
+  const m=ctx.getTransform();if(MIR){ctx.translate(400,0);ctx.scale(-1,1)}// undo mirror for text
+  ctx.font=`700 ${o.size||16}px "Barlow Condensed", "Arial Narrow", sans-serif`;const w=ctx.measureText(text).width+16,h=(o.size||16)+8;
+  let lx=o.align==='left'?x:x-w/2;if(MIR&&o.abs!==true&&o.align!=='left')lx=400-x-w/2;if(MIR&&o.align==='left')lx=x;
+  ctx.fillStyle=o.bg||COL.ink;ctx.globalAlpha=o.alpha??.88;roundRect(ctx,lx,y-h/2,w,h,h/2);ctx.fill();
+  ctx.globalAlpha=1;ctx.fillStyle=o.fg||COL.surface;ctx.textBaseline='middle';ctx.fillText(text,lx+8,y+1);ctx.restore()}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function ring(ctx,x,y,r,t,rx){ctx.save();ctx.strokeStyle=COL.flag;ctx.lineWidth=3;ctx.globalAlpha=.55+.45*Math.sin(t*6);ctx.beginPath();
+  ctx.ellipse(x,y,(rx||r)+2*Math.sin(t*6),r+2*Math.sin(t*6),0,0,7);ctx.stroke();ctx.restore()}
+function line(ctx,x1,y1,x2,y2,w,c){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke()}
+function flagAt(ctx,x,y,h=40){line(ctx,x,y,x,y-h,2,COL.ink);ctx.fillStyle=COL.flag;ctx.beginPath();ctx.moveTo(x,y-h);ctx.lineTo(x+16,y-h+6);ctx.lineTo(x,y-h+12);ctx.fill()}
+function clubOnGround(ctx,x1,y1,x2,y2){line(ctx,x1,y1,x2,y2,3.5,COL.steel);const L=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/L,uy=(y2-y1)/L;
+  line(ctx,x1,y1,x1+ux*24,y1+uy*24,6,COL.grip);ctx.save();ctx.translate(x2,y2);ctx.rotate(Math.atan2(uy,ux));ctx.fillStyle=COL.steel;roundRect(ctx,-3,-3,10,9,3);ctx.fill();ctx.restore()}
+function teePeg(ctx,x,y){ctx.fillStyle=COL.cap;ctx.strokeStyle=COL.ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,4.5,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=COL.gold;ctx.beginPath();ctx.arc(x,y,2,0,7);ctx.fill()}
+function ballAt(ctx,x,y,r=5){ctx.fillStyle=COL.ball;ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();ctx.stroke()}
+
+/* --- golfer poses (face-on, right-handed; target to the right) --- */
+const P={
+ address:{a:-4,c:-6,w:1,hx:0,lk:0,tk:0,heel:0},
+ takeaway:{a:38,c:90,w:.8,hx:-4,lk:-2,tk:0,heel:0},
+ half:{a:80,c:170,w:.62,hx:-6,lk:-5,tk:0,heel:0},
+ top:{a:140,c:262,w:.45,hx:-7,lk:-9,tk:0,heel:0},
+ down:{a:75,c:165,w:.62,hx:8,lk:2,tk:2,heel:0},
+ impact:{a:-6,c:-9,w:.85,hx:12,lk:3,tk:6,heel:.2},
+ through:{a:-80,c:-135,w:.6,hx:16,lk:4,tk:14,heel:.6},
+ finish:{a:-150,c:-232,w:.42,hx:18,lk:4,tk:24,heel:1},
+ chipAddr:{a:-8,c:-10,w:.95,hx:6,lk:0,tk:2,heel:0},
+ chipBack:{a:22,c:30,w:.88,hx:6,lk:0,tk:2,heel:0},
+ chipThru:{a:-30,c:-34,w:.88,hx:8,lk:1,tk:5,heel:.1},
+ puttAddr:{a:0,c:0,w:1,hx:0,lk:0,tk:0,heel:0},
+ puttBack:{a:13,c:13,w:.98,hx:0,lk:0,tk:0,heel:0},
+ puttThru:{a:-13,c:-13,w:.98,hx:0,lk:0,tk:0,heel:0},
+ p730:{a:45,c:75,w:.76,hx:-2,lk:-2,tk:0,heel:0},
+ p9:{a:90,c:178,w:.6,hx:-5,lk:-5,tk:0,heel:0},
+ p1030:{a:125,c:240,w:.5,hx:-6,lk:-7,tk:0,heel:0}
+};
+const GROUND=212;
+function clubLen(o){return o.club==='driver'?80:o.club==='putter'?58:74}
+function golferGeom(p,o){const hip={x:200+p.hx,y:140},S={x:200+p.hx*.55,y:82},head={x:200+p.hx*.3,y:58};
+  const armL=o.club==='putter'?50:58,d=dir(p.a),H={x:S.x+armL*d[0],y:S.y+armL*d[1]};const cd=dir(p.c),L=clubLen(o);
+  const E={x:H.x+L*cd[0],y:H.y+L*cd[1]};return {hip,S,head,H,E}}
+function interpPose(seq,t,o){ // returns pose & meta
+  const keys=seq.map(k=>P[k]);if(keys.length===1)return {p:keys[0],u:1,seg:0,total:0,times:[0]};
+  const slow=o.slow||1,minD=o.club==='putter'?.75:(o.shot==='chip'?.5:.22);
+  const times=[0.6];for(let i=1;i<keys.length;i++){const da=keys[i].a-keys[i-1].a;let d=Math.abs(da)/(da>0?150:520);d=Math.max(minD,d)*slow;times.push(times[i-1]+d)}
+  const total=times[times.length-1]+1.4;const tt=t%total;
+  if(tt<=times[0])return {p:keys[0],tt,times,total};
+  for(let i=1;i<keys.length;i++)if(tt<=times[i]){const u=ease((tt-times[i-1])/(times[i]-times[i-1])),A=keys[i-1],B=keys[i],p={};for(const k in A)p[k]=lerp(A[k],B[k],u);return {p,tt,times,total}}
+  return {p:keys[keys.length-1],tt,times,total}}
+const SCENES={};
+SCENES.g=function(ctx,t,o,st){const C=COL;
+  // background: sky + ground strip
+  ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);
+  ctx.fillStyle=o.shot==='putt'||o.club==='putter'?C.putt:C.turf;ctx.fillRect(0,GROUND,400,38);ctx.fillStyle=C.turf2;ctx.fillRect(0,GROUND,400,4);
+  ctx.save();mirror(ctx,!!S.lefty);
+  const {p,tt,times}=interpPose(o.seq,t,o);const g=golferGeom(p,o),addr=golferGeom(P[o.seq[0]],o);
+  const stance=o.stance??26;
+  // ball position = address clubhead
+  const bx=addr.E.x+5,teed=o.club==='driver'&&!o.ground,by=teed?GROUND-12:GROUND-5;
+  // clock face
+  if(o.clock){ctx.save();ctx.strokeStyle=C.muted;ctx.globalAlpha=.5;ctx.setLineDash([3,5]);ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(g.S.x,g.S.y,74,0,7);ctx.stroke();ctx.restore();
+    [[90,'9:00'],[45,'7:30'],[135,'10:30']].forEach(([a,s])=>{const d=dir(a);label(ctx,g.S.x+92*d[0],g.S.y+86*d[1],s,{size:13,alpha:.7,abs:false})})}
+  // alignment / props
+  if(o.teeBehind){line(ctx,bx-14,GROUND-2,bx-14,GROUND-10,3,C.cap)}
+  if(o.teeAhead){line(ctx,bx+16,GROUND-2,bx+16,GROUND-10,3,C.cap)}
+  // ball state
+  let ballX=bx,ballY=by,show=o.ball||o.hl==='ball'||o.club==='driver'||o.club==='putter'||o.shot;
+  const ii=o.seq.indexOf('impact')>=0?o.seq.lastIndexOf('impact'):(o.shot?o.seq.length-1:-1);
+  if(show&&ii>0&&times&&tt>times[ii]-(o.shot==='putt'||o.shot==='chip'?(times[ii]-times[ii-1])*.5:0.01)){
+    const dt=tt-(times[ii]-(o.shot==='putt'||o.shot==='chip'?(times[ii]-times[ii-1])*.5:0));
+    if(o.shot==='putt'){ballX=bx+Math.min(220,160*dt*(1-Math.min(1,dt/2.4)*.5))}
+    else if(o.shot==='chip'||o.shot==='pitch'){const hh=o.shot==='pitch'?120:45;ballX=bx+190*dt;ballY=by-hh*Math.sin(Math.min(Math.PI,dt*2.6))}
+    else{ballX=bx+420*dt;ballY=by-260*dt+60*dt*dt}
+    if(teed){line(ctx,bx,GROUND,bx,GROUND-7,2.5,C.cap)}
+  }else if(teed){line(ctx,bx,GROUND,bx,GROUND-7,2.5,C.cap)}
+  if(show&&ballX<420&&ballY>-10)ballAt(ctx,ballX,ballY,4.5);
+  // clubhead trail
+  if(!st.trail)st.trail=[];st.trail.push([g.E.x,g.E.y,tt]);st.trail=st.trail.filter(q=>tt-q[2]<.35&&q[2]<=tt);
+  if(st.trail.length>2){ctx.save();ctx.strokeStyle=C.ball;ctx.globalAlpha=.5;ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();st.trail.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.restore()}
+  // legs
+  const hip=g.hip,lFoot={x:200+stance,y:GROUND},tFoot={x:200-stance+p.heel*10,y:GROUND-p.heel*7};
+  const lKnee={x:200+stance*.6+p.lk+4,y:178},tKnee={x:200-stance*.6+p.tk-4,y:178};
+  ctx.lineJoin='round';
+  [[hip.x-10,tKnee,tFoot],[hip.x+10,lKnee,lFoot]].forEach(([hx,k,f])=>{ctx.strokeStyle=C.pants;ctx.lineWidth=11;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hx,hip.y);ctx.lineTo(k.x,k.y);ctx.lineTo(f.x,f.y-4);ctx.stroke()});
+  ctx.fillStyle=C.ink;[[tFoot,-1],[lFoot,1]].forEach(([f,s])=>{ctx.beginPath();ctx.ellipse(f.x+s*4,f.y-2,9,4,0,0,7);ctx.fill()});
+  // torso
+  ctx.strokeStyle=C.shirt;ctx.lineWidth=22;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hip.x,hip.y-4);ctx.lineTo(g.S.x,g.S.y+8);ctx.stroke();
+  const sw=19*p.w;line(ctx,g.S.x-sw,g.S.y+2,g.S.x+sw,g.S.y+2,12,C.shirt);
+  if(o.towel){ctx.fillStyle=C.cap;ctx.fillRect(g.S.x-sw-5,g.S.y+8,10,8);ctx.fillRect(g.S.x+sw-5,g.S.y+8,10,8)}
+  // head + cap
+  ctx.fillStyle=C.skin;ctx.beginPath();ctx.arc(g.head.x,g.head.y,13,0,7);ctx.fill();
+  ctx.fillStyle=C.cap;ctx.beginPath();ctx.arc(g.head.x,g.head.y-3,13.5,Math.PI,0);ctx.fill();ctx.fillRect(g.head.x-2,g.head.y-6,18,4);
+  // arms
+  [[g.S.x-sw,1],[g.S.x+sw,-1]].forEach(([sx])=>{ctx.strokeStyle=C.skin;ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(sx,g.S.y+4);ctx.lineTo(g.H.x,g.H.y);ctx.stroke()});
+  // club
+  line(ctx,g.H.x,g.H.y,g.E.x,g.E.y,3,C.steel);const cd=dir(p.c);line(ctx,g.H.x,g.H.y,g.H.x+cd[0]*16,g.H.y+cd[1]*16,6,C.grip);
+  ctx.save();ctx.translate(g.E.x,g.E.y);ctx.rotate(rad(p.c));ctx.fillStyle=o.club==='driver'?C.grip:C.steel;
+  if(o.club==='driver')roundRect(ctx,-5,-6,18,11,5);else if(o.club==='putter')roundRect(ctx,-6,-3,16,6,2);else roundRect(ctx,-3,-3,14,6,2);ctx.fill();ctx.restore();
+  ctx.fillStyle=C.skin;ctx.beginPath();ctx.arc(g.H.x,g.H.y,5.5,0,7);ctx.fill();
+  // highlight
+  const hl={hands:[g.H.x,g.H.y,13],head:[g.head.x,g.head.y,20],hips:[hip.x,hip.y,20],shoulders:[g.S.x,g.S.y+2,16,32],knees:[200+p.lk,178,12,stance+14],feet:[200,GROUND-2,10,stance+18],ball:[bx,by,11],club:[g.E.x,g.E.y,13]}[o.hl];
+  if(hl)ring(ctx,hl[0],hl[1],hl[2],t,hl[3]);
+  if(o.hl==='hips'||o.label==='Hinge at hips'){}
+  ctx.restore();MIR=false;
+  // labels (unmirrored)
+  if(o.count&&times){const s=o.seq,iTop=s.indexOf('top'),iImp=s.indexOf('impact');let txt='';
+    if(tt>times[0]&&tt<=times[iTop]){const u=(tt-times[0])/(times[iTop]-times[0]);txt=['ONE','TWO','THREE'][Math.min(2,Math.floor(u*3))]}else if(tt>times[iTop]&&tt<=times[iImp]+.3)txt='ONE!';
+    if(txt)label(ctx,200,26,txt,{size:24,bg:COL.flag,fg:'#fff',abs:true})}
+  else if(o.label)label(ctx,200,24,o.label,{size:18,abs:true});
+};
+// grip close-up
+SCENES.gp=function(ctx,t,o){const C=COL,s=o.stage;ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);
+  ctx.save();mirror(ctx,!!S.lefty);
+  const gx=190;line(ctx,gx,0,gx,250,6,C.steel);ctx.fillStyle=C.grip;roundRect(ctx,gx-14,-10,28,180,8);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;for(let y=0;y<170;y+=8){ctx.beginPath();ctx.moveTo(gx-14,y);ctx.lineTo(gx+14,y);ctx.stroke()}
+  const pulse=.55+.45*Math.sin(t*5);
+  if(s===1){ctx.save();ctx.strokeStyle=C.gold;ctx.lineWidth=10;ctx.globalAlpha=.85;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(gx-40,95);ctx.lineTo(gx+40,40);ctx.stroke();ctx.restore();
+    // open hand
+    ctx.fillStyle=C.skin;ctx.globalAlpha=.9;roundRect(ctx,gx-90,60,70,80,20);ctx.fill();for(let i=0;i<4;i++){roundRect(ctx,gx-26+i*0,42+i*0,0,0,0)}
+    for(let i=0;i<4;i++){ctx.save();ctx.translate(gx-30,66+i*18);ctx.rotate(-.55);roundRect(ctx,0,-7,66,14,7);ctx.fill();ctx.restore()}ctx.globalAlpha=1}
+  if(s>=2){const slide=s===2?Math.min(1,t*1.5):1;ctx.globalAlpha=slide;ctx.fillStyle=C.skin;roundRect(ctx,gx-34,30,74,72,18);ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=2;for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(gx+14,48+i*16);ctx.lineTo(gx+38,48+i*16);ctx.stroke()}
+    // thumb
+    ctx.fillStyle=C.skin;roundRect(ctx,gx-4,70,16,48,8);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();
+    // knuckles
+    ctx.fillStyle=C.flag;ctx.globalAlpha=s===2?pulse:.6;[[gx+30,36],[gx+18,32],[gx+6,32]].forEach(([x,y])=>{ctx.beginPath();ctx.arc(x,y,4.5,0,7);ctx.fill()});ctx.globalAlpha=1}
+  if(s>=3){ctx.save();ctx.globalAlpha=s===3?pulse:.6;ctx.strokeStyle=C.flag;ctx.lineWidth=4;ctx.setLineDash([8,6]);ctx.beginPath();ctx.moveTo(gx-6,74);ctx.lineTo(gx+120,10);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=C.flag;ctx.beginPath();ctx.moveTo(gx+130,5);ctx.lineTo(gx+112,8);ctx.lineTo(gx+121,22);ctx.fill();ctx.restore()}
+  if(s>=4){const sl=s===4?Math.min(1,t*1.2):1;ctx.globalAlpha=Math.min(1,sl*1.3);ctx.fillStyle=C.skin;const y=lerp(170,100,ease(sl));roundRect(ctx,gx-36,y,76,66,18);ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.28)';ctx.lineWidth=2;roundRect(ctx,gx-36,y,76,66,18);ctx.stroke();for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(gx+16,y+18+i*15);ctx.lineTo(gx+40,y+18+i*15);ctx.stroke()}ctx.globalAlpha=1}
+  if(s===5){for(let i=0;i<10;i++){ctx.fillStyle=i<4?(i===3?C.flag:C.gold):C.line;ctx.globalAlpha=i<4?(.7+.3*Math.sin(t*4)):1;roundRect(ctx,300,214-i*18,40,13,4);ctx.fill()}ctx.globalAlpha=1}
+  ctx.restore();MIR=false;
+  const L={1:'Fingers, not palm',2:'See 2–3 knuckles',3:'V points to trail shoulder',4:'Trail palm covers lead thumb',5:'Pressure: 4 out of 10'}[s];label(ctx,200,232,L,{size:18,abs:true});
+  if(s===5)label(ctx,S.lefty?80:320,24,'4 / 10',{size:16,abs:true,bg:COL.flag,fg:'#fff'})};
+// top-down putting green
+SCENES.gr=function(ctx,t,o,st){const C=COL;ctx.fillStyle=C.turf;ctx.fillRect(0,0,400,250);
+  if(o.edge){ctx.fillStyle=C.putt;ctx.beginPath();ctx.ellipse(220,125,150,92,0,0,7);ctx.fill()}
+  else{ctx.fillStyle=C.putt;roundRect(ctx,8,8,384,234,26);ctx.fill();ctx.save();ctx.clip();ctx.fillStyle=C.putt2;for(let x=8;x<400;x+=48)ctx.fillRect(x,0,24,250);ctx.restore()}
+  if(o.ring&&o.hole){ctx.save();ctx.setLineDash([5,6]);ctx.strokeStyle=C.ball;ctx.globalAlpha=.6;ctx.lineWidth=2;ctx.beginPath();ctx.arc(o.hole[0],o.hole[1],o.ring,0,7);ctx.stroke();ctx.restore()}
+  if(o.aim&&o.hole&&o.balls){ctx.save();ctx.setLineDash([6,6]);ctx.strokeStyle=C.ball;ctx.globalAlpha=.7;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(o.balls[0][0],o.balls[0][1]);ctx.lineTo(o.hole[0],o.hole[1]);ctx.stroke();ctx.restore()}
+  if(o.hole){ctx.fillStyle=C.hole;ctx.beginPath();ctx.arc(o.hole[0],o.hole[1],7.5,0,7);ctx.fill();line(ctx,o.hole[0],o.hole[1],o.hole[0]+16,o.hole[1]-30,2,'rgba(0,0,0,.25)')}
+  (o.clubs||[]).forEach(c=>clubOnGround(ctx,...c));
+  (o.tees||[]).forEach(p=>teePeg(ctx,p[0],p[1]));
+  (o.balls||[]).forEach(p=>ballAt(ctx,p[0],p[1]));
+  if(o.putterAt){const [x,y]=o.putterAt;const sw=Math.sin(t*2.2)*14;ctx.fillStyle=C.steel;roundRect(ctx,x-16+sw-6,y-17,8,34,3);ctx.fill()}
+  // rolls
+  const R=o.rolls||[];if(R.length){const seg=2.3,total=R.length*seg+1.2,tt=t%total;let made=0;
+    R.forEach((r,i)=>{const s=tt-i*seg;const L=Math.hypot(r.to[0]-r.f[0],r.to[1]-r.f[1]),ux=(r.to[0]-r.f[0])/L,uy=(r.to[1]-r.f[1])/L;
+      if(s<0){if(i===0||R[i-1].f[0]!==r.f[0]||R[i-1].f[1]!==r.f[1]||s>-seg)ballAt(ctx,r.f[0],r.f[1]);return}
+      // putter
+      if(s<.6){const bk=s<.4?Math.sin(s/.4*Math.PI/2)*16:16-(s-.4)/.2*16;ctx.save();ctx.translate(r.f[0]-ux*(8+bk),r.f[1]-uy*(8+bk));ctx.rotate(Math.atan2(uy,ux));ctx.fillStyle=C.steel;roundRect(ctx,-4,-16,7,32,3);ctx.fill();ctx.restore()}
+      const u=Math.max(0,Math.min(1,(s-.6)/1.4)),k=1-Math.pow(1-u,2.4);const x=r.f[0]+ux*L*k,y=r.f[1]+uy*L*k;
+      if(r.inn&&u>=1){made++;return}ballAt(ctx,x,y,r.inn&&u>.97?4:5)});
+    if(o.count){label(ctx,200,24,'Made: '+made,{size:18,abs:true,bg:COL.flag,fg:'#fff'})}}
+  (o.labels||[]).forEach(([x,y,s])=>label(ctx,x,y,s,{size:15,abs:true}));
+  if(o.label)label(ctx,200,22,o.label,{size:18,abs:true})};
+// side-view chip flight
+SCENES.f=function(ctx,t,o){const C=COL,GY=200;ctx.fillStyle=C.sky;ctx.fillRect(0,0,400,250);
+  ctx.fillStyle=C.turf;ctx.fillRect(0,GY,400,50);ctx.fillStyle=C.putt;ctx.fillRect(210,GY,190,7);ctx.fillStyle=C.soil;ctx.fillRect(0,GY+18,400,32);
+  label(ctx,305,GY+30,'GREEN',{size:13,abs:true,alpha:.5});label(ctx,100,GY+30,'FRINGE',{size:13,abs:true,alpha:.5});
+  if(o.towel){ctx.fillStyle=C.cap;roundRect(ctx,o.towel-20,GY-4,40,6,2);ctx.fill();ctx.fillStyle=C.flag;ctx.fillRect(o.towel-20,GY-4,4,6);ctx.fillRect(o.towel+16,GY-4,4,6)}
+  if(o.flag){ctx.fillStyle=C.hole;ctx.fillRect(o.flag-6,GY,12,4);flagAt(ctx,o.flag,GY,70)}
+  const x0=40;ballAt(ctx,x0,GY-5,0.01);
+  const sh=o.shots||[];if(!sh.length){ballAt(ctx,x0,GY-5);return}
+  const durs=sh.map(s=>1.0+Math.max(.5,(s.stop-s.land)/110)+.9),total=durs.reduce((a,b)=>a+b,0)+.6;let tt=t%total,i=0;
+  while(i<sh.length&&tt>durs[i]){// previous resting balls
+    ctx.globalAlpha=.45;ballAt(ctx,sh[i].stop,GY-5);ctx.globalAlpha=1;tt-=durs[i];i++}
+  if(i>=sh.length)return;const s=sh[i],air=1.0,roll=Math.max(.5,(s.stop-s.land)/110);let x,y;
+  // trace
+  ctx.save();ctx.setLineDash([3,5]);ctx.strokeStyle=C.ball;ctx.globalAlpha=.8;ctx.lineWidth=2;ctx.beginPath();
+  const ua=Math.min(1,tt/air);for(let k=0;k<=ua+1e-6;k+=.02){const xx=lerp(x0,s.land,k),yy=GY-5-s.h*4*k*(1-k);k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.stroke();ctx.restore();
+  if(tt<air){const u=tt/air;x=lerp(x0,s.land,u);y=GY-5-s.h*4*u*(1-u)}
+  else{const u=Math.min(1,(tt-air)/roll),k=1-Math.pow(1-u,2);x=lerp(s.land,s.stop,k);y=GY-5;
+    ctx.save();ctx.strokeStyle=C.gold;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(s.land,GY+11);ctx.lineTo(x,GY+11);ctx.stroke();ctx.restore();
+    if(u>.3){label(ctx,(x0+s.land)/2,GY-s.h-16,'Air',{size:14,abs:true,alpha:.7});label(ctx,(s.land+s.stop)/2,GY-22,'Roll',{size:14,abs:true,bg:COL.gold,fg:'#1d1600'})}}
+  ballAt(ctx,x,y);if(s.lbl)label(ctx,12,22,s.lbl,{size:18,align:'left',abs:true})};
+// top-down range
+SCENES.r=function(ctx,t,o){const C=COL;ctx.fillStyle=C.turf;ctx.fillRect(0,0,400,250);ctx.fillStyle=C.turf2;for(let y=0;y<250;y+=36)ctx.fillRect(0,y,400,18);
+  ctx.save();mirror(ctx,!!S.lefty);
+  if(o.fairway){ctx.fillStyle=C.putt;ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(176,190);ctx.lineTo(224,190);ctx.lineTo(240,30);ctx.lineTo(160,30);ctx.closePath();ctx.fill();ctx.globalAlpha=1}
+  ctx.fillStyle=C.sand;ctx.fillRect(0,200,400,50);
+  (o.targets||[]).forEach((p,i)=>{ctx.fillStyle=C.putt2;ctx.beginPath();ctx.ellipse(p[0],p[1],20,9,0,0,7);ctx.fill();flagAt(ctx,p[0],p[1],26)});
+  if(o.aim&&o.targets){ctx.save();ctx.setLineDash([6,6]);ctx.strokeStyle=C.ball;ctx.lineWidth=2;ctx.globalAlpha=.8;ctx.beginPath();ctx.moveTo(200,222);ctx.lineTo(o.targets[0][0],o.targets[0][1]);ctx.stroke();ctx.restore()}
+  (o.clubs||[]).forEach(c=>clubOnGround(ctx,...c));
+  // golfer feet (stands left of ball for a right-hander, target up)
+  ctx.fillStyle=C.ink;ctx.beginPath();ctx.ellipse(166,206,5,10,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(166,238,5,10,0,0,7);ctx.fill();
+  const sh=o.shots||[];const seg=1.6,total=sh.length*seg+1;const tt=t%total;
+  sh.forEach((s,i)=>{const u=Math.max(0,Math.min(1,(tt-i*seg)/1.2));if(tt<i*seg)return;const k=ease(u);
+    const cx=(200+s.to[0])/2+(s.c||0)*1.6,cy=(222+s.to[1])/2;const bx=(1-k)*(1-k)*200+2*(1-k)*k*cx+k*k*s.to[0],by=(1-k)*(1-k)*222+2*(1-k)*k*cy+k*k*s.to[1];
+    ctx.save();ctx.strokeStyle=C.ball;ctx.globalAlpha=.55;ctx.lineWidth=2;ctx.beginPath();for(let q=0;q<=k;q+=.02){const x=(1-q)*(1-q)*200+2*(1-q)*q*cx+q*q*s.to[0],y=(1-q)*(1-q)*222+2*(1-q)*q*cy+q*q*s.to[1];q?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();ctx.restore();
+    ballAt(ctx,bx,by,lerp(5,3,k))});
+  if(!sh.length||tt>sh.length*seg)ballAt(ctx,200,222);
+  ctx.restore();MIR=false};
+let SCENES_READY=true;
+
+/* ======================= BOOT ======================= */
+fromHash();render();
+</script>
+
+</body>
+</html>

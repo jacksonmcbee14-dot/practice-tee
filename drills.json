@@ -1,0 +1,17 @@
+[
+  {
+    "id": "2026-11-17-eyes-closed-lag",
+    "cat": "putt",
+    "name": "Eyes-Closed Lag",
+    "min": 10,
+    "where": "Practice green",
+    "need": "Putter, 3 balls",
+    "added": "2026-11-17",
+    "steps": [
+      {"t": "Pick a hole 25 feet away. Look at the hole, then look at your ball.", "s": {"k": "gr", "hole": [340, 125], "balls": [[50, 125]], "aim": true, "labels": [[195, 100, "25 ft"]]}},
+      {"t": "Close your eyes and putt. Keep them closed.", "s": {"k": "gr", "hole": [340, 125], "rolls": [{"f": [50, 125], "to": [318, 132]}], "label": "Eyes closed"}},
+      {"t": "Before you look, guess: short or long? Left or right? Then open your eyes and check.", "s": {"k": "gr", "hole": [340, 125], "balls": [[318, 132]], "ring": 28, "label": "Short and right?"}},
+      {"t": "Do 10. Your guesses get better as your feel for distance gets better.", "s": {"k": "gr", "hole": [340, 125], "ring": 28, "rolls": [{"f": [50, 125], "to": [352, 118]}, {"f": [50, 125], "to": [332, 128]}, {"f": [50, 125], "to": [340, 125], "inn": true}]}}
+    ]
+  }
+]
