@@ -1,5 +1,5 @@
 // Practice Tee offline support: try the network first, fall back to the saved copy.
-const CACHE = 'practice-tee-v2';
+const CACHE = 'practice-tee-v3';
 const SHELL = ['./', 'index.html', 'drills.json', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

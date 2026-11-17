@@ -171,6 +171,46 @@ main{max-width:720px;margin:0 auto;padding-block:16px 120px;padding-left:max(16p
   padding:12px 20px;border-radius:30px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;transition:all .3s;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .sync{font-size:12px;color:var(--muted);text-align:center}
+.startbtn{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:16px;background:var(--fair);color:var(--on-fair);padding:16px 18px;text-align:left}
+.startbtn svg{width:46px;height:46px;flex:none;background:rgba(255,255,255,.22);border-radius:50%;padding:11px}
+.startbtn b{display:block;font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1.05}
+.startbtn small{font-size:14px;opacity:.92}
+.warn,.okay{background:var(--surface);border:2px solid var(--flag);border-radius:14px;padding:12px 14px;font-size:15px}
+.okay{border-color:var(--fair)}
+.coach{background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.coach p{margin:0}.coach-d{display:flex;gap:8px;flex-wrap:wrap}.coach small{color:var(--muted);font-size:12px}
+.card .tx .pb{font-size:13px;font-weight:700;color:var(--flag)}
+.rin{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:6px}
+.rin label{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted);font-family:var(--display);font-weight:700;letter-spacing:.05em;text-transform:uppercase;min-width:0}
+.rin input,.rin select{width:100%;min-width:0;font:inherit;font-family:var(--display);font-size:20px;font-weight:700;padding:6px 2px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+.rhelp{margin:2px 0 0;font-size:12px;color:var(--muted);line-height:1.35}
+.tests{display:grid;gap:8px}
+.test{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;text-align:left;width:100%}
+.test span{flex:1;min-width:0;display:flex;flex-direction:column}.test b{font-family:var(--display);font-size:19px}.test small{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.spark{display:flex;align-items:flex-end;gap:3px;height:34px;width:96px;flex:none}.spark i{flex:1;background:var(--fair);border-radius:3px 3px 1px 1px}
+.trophies{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.trophy{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;opacity:.65}
+.trophy.got{opacity:1;border:2px solid var(--gold)}
+.medal{width:30px;height:30px;border-radius:50%;background:var(--line);display:grid;place-items:center;margin-bottom:4px}
+.trophy.got .medal{background:var(--gold);color:#1d1600}.medal svg{width:18px;height:18px}
+.trophy b{font-family:var(--display);font-size:17px;line-height:1.1}.trophy small{font-size:12px;color:var(--muted)}
+.sessbar{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;background:var(--fair);color:var(--on-fair);border-radius:12px;padding:10px 14px;font-family:var(--display);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:15px}
+.sessbar b{font-size:20px;font-variant-numeric:tabular-nums}.sessbar .prog{grid-column:1/-1;background:rgba(255,255,255,.3);height:6px}.sessbar .prog i{background:var(--gold)}
+.testbox{background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.testbox label{font-weight:600}.testbox small{color:var(--muted)}
+.testbox input{width:120px;font-family:var(--display);font-size:28px;font-weight:800;padding:6px 10px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center}
+.overlay{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.overlay-in{max-width:560px;margin:0 auto;padding-block:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.overlay h2{font-size:38px;text-transform:uppercase;line-height:1}
+.overlay p{margin:0;font-size:18px}
+#onbBody{display:flex;flex-direction:column;gap:14px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:16px;font-size:19px;font-weight:600;text-align:left}
+.opt.sel{border-color:var(--fair);background:var(--surface2)}
+.skip{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:15px;align-self:center;padding:8px}
+#celCanvas{display:block;width:100%;aspect-ratio:400/250;max-width:100%;border-radius:16px;background:var(--sky)}
+#cel .overlay-in{text-align:center}
+.cel-badges{display:grid;gap:8px;text-align:left}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -187,15 +227,19 @@ main{max-width:720px;margin:0 auto;padding-block:16px 120px;padding-left:max(16p
 
 <div class="player" id="player" hidden role="dialog" aria-modal="true" aria-labelledby="pTitle">
   <div class="player-in">
+    <div class="sessbar" id="pSess" hidden></div>
     <div class="ph"><h2 id="pTitle">Drill</h2><button class="x" id="pClose" aria-label="Close drill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="stage"><canvas id="pCanvas" width="800" height="500"></canvas></div>
     <div class="need" id="pNeed"></div>
     <div class="dots" id="pDots"></div>
     <div><div class="stepnum" id="pNum">Step 1</div><p class="steptxt" id="pText"></p></div>
+    <div class="testbox" id="pTest" hidden><label for="pScore" id="pTestQ">Your score</label><input id="pScore" type="number" inputmode="numeric" min="0" placeholder="—"><small id="pTestBest"></small></div>
     <div class="ctrls"><button class="btn sec" id="pBack">Back</button><button class="btn pri" id="pNext">Next</button></div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="overlay" id="onb" hidden role="dialog" aria-modal="true" aria-label="Set up your plan"><div class="overlay-in"><img src="icon-192.png" alt="" width="64" height="64" style="border-radius:16px"><div id="onbBody"></div></div></div>
+<div class="overlay" id="cel" hidden role="dialog" aria-modal="true" aria-labelledby="celTitle"><div class="overlay-in"><canvas id="celCanvas" width="800" height="500" aria-hidden="true"></canvas><h2 id="celTitle"></h2><p id="celSub"></p><div class="cel-badges" id="celBadges"></div><button class="btn win" id="celOk">Keep going</button></div></div>
 
 <script>
 /* ======================= CONTENT ======================= */
@@ -446,24 +490,87 @@ const LEVELS=['Range Rat','Weekend Hacker','Bogey Hunter','Fairway Finder','Gree
 /* ======================= STATE ======================= */
 const LS='practice-tee-v1';
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-let S={start:today(),tasks:{},drills:{},days:{},scores:{},lefty:false,updated:0};
+let S={start:today(),tasks:{},drills:{},days:{},scores:{},lefty:false,updated:0,onboarded:false,profile:{},tests:{},rounds:{},badges:{},sessDone:0};
 try{const raw=localStorage.getItem(LS);if(raw){S={...S,...JSON.parse(raw)}}}catch(e){}
-let ref=null,writing=false,again=false,saveT=null,synced=false;
-function save(){S.updated=Date.now();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
-  clearTimeout(saveT);saveT=setTimeout(flush,600)}
-async function flush(){if(!ref)return;if(writing){again=true;return}writing=true;
-  try{await ref.set({state:JSON.parse(JSON.stringify(S))});synced=true}catch(e){}
-  writing=false;if(again){again=false;flush()}renderSync()}
+for(const k of ['tasks','drills','days','scores','profile','tests','rounds','badges'])if(!S[k]||typeof S[k]!=='object')S[k]={};
+function save(){S.updated=Date.now();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 fetch('drills.json',{cache:'no-cache'}).then(r=>r.ok?r.json():[]).then(list=>{setExtras((Array.isArray(list)?list:[]).map(d=>({id:d.id,data:()=>JSON.parse(JSON.stringify(d))})));if($('#player').hidden)render()}).catch(()=>{});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 const dayNum=s=>Math.floor(new Date(s+'T12:00:00').getTime()/864e5);
 function curWeek(){return Math.max(1,Math.min(12,Math.floor((dayNum(today())-dayNum(S.start))/7)+1))}
-function xp(){let x=0;for(const k in S.tasks)if(S.tasks[k])x+=10;for(const k in S.drills)x+=5*S.drills[k];return x}
-function streak(){let n=0,d=dayNum(today());if(!S.days[fmt(d)])d--;while(S.days[fmt(d)]){n++;d--}return n}
+function xp(){let x=0;for(const k in S.tasks)if(S.tasks[k])x+=10;for(const k in S.drills)x+=5*S.drills[k];return x+10*(S.sessDone||0)}
 function fmt(n){const d=new Date(n*864e5);return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0')}
 function bump(){const t=today();S.days[t]=(S.days[t]||0)+1}
 function weekDone(w){return PLAN[w].filter((_,i)=>S.tasks['w'+w+'-'+i]).length}
+const totalDrills=()=>Object.values(S.drills).reduce((a,b)=>a+b,0);
+// Streak: consecutive practice days. One missed day per week (Mon–Sun) is forgiven automatically: a "streak freeze".
+const wkOf=n=>Math.floor((n+3)/7);
+function streakInfo(){const has=n=>!!S.days[fmt(n)];let d=dayNum(today());if(!has(d))d--;let n=0;const froze=[];
+  for(let guard=0;guard<4000;guard++){if(has(d)){n++;d--;continue}
+    if(has(d-1)&&!froze.some(f=>wkOf(f)===wkOf(d))){froze.push(d);d--;continue}break}
+  return {n,froze}}
+const streak=()=>streakInfo().n;
+
+/* --- scored drills --- */
+const TESTS={
+ 'p-ten':{q:'Most putts made in a row',max:50,hi:true,u:''},
+ 'p-gate':{q:'Putts made out of 10',max:10,hi:true,u:'/10'},
+ 'p-start':{q:'Balls through the gate out of 20',max:20,hi:true,u:'/20'},
+ 'p-clock':{q:'Putts made out of 12 (4 each from 3, 4 and 5 feet)',max:12,hi:true,u:'/12'},
+ 'p-past':{q:'Putts that stopped in the zone, out of 10',max:10,hi:true,u:'/10'},
+ 'p-ladder':{q:'Putts within one club length, out of 9',max:9,hi:true,u:'/9'},
+ 'c-towel':{q:'Chips that landed on the towel, out of 10',max:10,hi:true,u:'/10'},
+ 'c-updown':{q:'Total strokes for 9 balls (par is 18)',max:90,hi:false,u:''},
+ 'c-tee':{q:'Chips that missed the tee, out of 10',max:10,hi:true,u:'/10'},
+ 'l-fairway':{q:'Shots in your fairway, out of 10',max:10,hi:true,u:'/10'},
+ 'l-driver':{q:'Drives in your fairway, out of 10',max:10,hi:true,u:'/10'},
+ 's-finish':{q:'Finishes held for 3 seconds, out of 10',max:10,hi:true,u:'/10'}
+};
+const results=id=>Array.isArray(S.tests[id])?S.tests[id]:[];
+function best(id){const r=results(id).map(x=>x.v);if(!r.length)return null;return TESTS[id].hi?Math.max(...r):Math.min(...r)}
+
+/* --- rounds and practice focus --- */
+const ISSUES={slice:{t:'My shots curve off line (slice or hook)',cat:'swing',drills:['s-grip','s-align'],why:'You said your shots curve off line. That usually starts with the grip and aim.'},
+ contact:{t:'I top it or hit behind the ball',cat:'swing',drills:['l-line','s-distance'],why:'You said you top it or hit behind it. Setup distance and ball-first contact fix most of that.'},
+ chip:{t:'My chips are all over the place',cat:'chip',drills:['c-setup','c-towel'],why:'You said chipping is the problem, so it gets extra time.'},
+ putt:{t:'Too many putts',cat:'putt',drills:['p-ladder','p-ten'],why:'You said you take too many putts. Speed control fixes most 3-putts.'},
+ unsure:{t:'Not sure yet',cat:null}};
+const FOCUS={putt:['p-ladder','p-ten'],long:['l-fairway','s-align'],chip:['c-updown','c-towel']};
+const CATNAME={swing:'Swing',long:'Long shots',chip:'Chipping',putt:'Putting'};
+function focusInfo(){
+  const ws=Object.keys(S.rounds).map(Number).filter(w=>S.rounds[w]).sort((a,b)=>b-a);
+  for(const w of ws){const r=S.rounds[w],h=+r.holes||18,num=v=>v!==undefined&&v!==''&&!isNaN(+v);const out=[];
+    if(num(r.putts))out.push({cat:'putt',gap:(+r.putts/h)-1.85,why:`${r.putts} putts in ${h} holes. Goal: under ${h===9?17:34}.`});
+    if(num(r.fir))out.push({cat:'long',gap:.45-(+r.fir/(h===9?7:14)),why:`${r.fir} of ${h===9?7:14} fairways hit. Goal: ${h===9?3:6} or more.`});
+    if(num(r.gir))out.push({cat:'chip',gap:(.3-(+r.gir/h))*1.1,why:`${r.gir} greens hit, so you had lots of chips. Saving those strokes is the quickest win.`});
+    if(out.length){out.sort((a,b)=>b.gap-a.gap);const o=out[0];
+      if(o.gap<=0)return {cat:null,good:true,why:`Week ${w}: putts, fairways and greens all looked solid. Keep following the plan.`};
+      return {...o,drills:FOCUS[o.cat],src:'Week '+w+' round'}}}
+  const is=ISSUES[S.profile.issue];
+  if(is&&is.cat)return {cat:is.cat,drills:is.drills,why:is.why,src:'Your setup answers'};
+  return null}
+
+/* --- badges --- */
+const rounds18=()=>Object.keys(S.scores).filter(w=>+((S.rounds[w]||{}).holes||18)===18).map(w=>+S.scores[w]).filter(Boolean);
+const BADGES=[
+ ['first','First Drill','Finish your first drill',()=>totalDrills()>=1],
+ ['sess','Full Session','Finish a whole daily session',()=>(S.sessDone||0)>=1],
+ ['d25','25 Drills','Finish 25 drills',()=>totalDrills()>=25],
+ ['d100','100 Drills','Finish 100 drills',()=>totalDrills()>=100],
+ ['s3','3-Day Streak','Practice 3 days in a row',()=>streak()>=3],
+ ['s7','7-Day Streak','Practice 7 days in a row',()=>streak()>=7],
+ ['s30','30-Day Streak','Practice 30 days in a row',()=>streak()>=30],
+ ['week','Week Complete','Check off every task in a week',()=>Object.keys(PLAN).some(w=>weekDone(w)===PLAN[w].length)],
+ ['plan','Plan Complete','Finish all 12 weeks',()=>Object.keys(PLAN).every(w=>weekDone(w)===PLAN[w].length)],
+ ['ten','Money Putter','Make 10 putts in a row',()=>(best('p-ten')||0)>=10],
+ ['par18','Up-and-Down Pro','Par 18 or better in the Up-and-Down Game',()=>{const b=best('c-updown');return b!=null&&b<=18}],
+ ['pb','Personal Best','Beat one of your drill scores',()=>Object.keys(TESTS).some(id=>{const r=results(id);if(r.length<2)return false;const prev=r.slice(0,-1).map(x=>x.v),v=r[r.length-1].v;return TESTS[id].hi?v>Math.max(...prev):v<Math.min(...prev)})],
+ ['b100','Broke 100','Shoot under 100 for 18 holes',()=>rounds18().some(s=>s<100)],
+ ['b90','Broke 90','Shoot under 90 for 18 holes',()=>rounds18().some(s=>s<90)],
+ ['hot','Hot Putter','32 putts or fewer in 18 holes',()=>Object.keys(S.rounds).some(w=>{const r=S.rounds[w]||{};return +(r.holes||18)===18&&r.putts!==''&&r.putts!=null&&+r.putts>0&&+r.putts<=32})]
+];
+function newBadges(){const got=[];for(const b of BADGES)if(!S.badges[b[0]]&&b[3]()){S.badges[b[0]]=today();got.push(b)}return got}
 
 /* ======================= UI ======================= */
 const $=s=>document.querySelector(s);
@@ -476,13 +583,23 @@ function renderTop(){const x=xp(),lv=Math.min(LEVELS.length-1,Math.floor(x/100))
 function renderNav(){$('#nav').innerHTML=TABS.map(([k,l])=>`<button data-tab="${k}" ${tab===k?'aria-current="page"':''}>${ICONS[k]}<span>${l}</span><i class="dot"></i></button>`).join('')}
 function renderSync(){const el=$('#syncNote');if(el)el.textContent='Your progress is saved on this phone'}
 
-function drillCard(d){const n=S.drills[d.id]||0;
-  return `<button class="card" data-drill="${d.id}"><span class="ic">${ICONS[d.cat]}</span><span class="tx"><b>${isNew(d)?'<span class="badge new">New</span> ':''}${esc(d.name)}</b><span>${d.min} min · ${esc(d.where)} · ${esc(d.need)}</span></span>
+function drillCard(d){const n=S.drills[d.id]||0,b=TESTS[d.id]?best(d.id):null;
+  return `<button class="card" data-drill="${d.id}"><span class="ic">${ICONS[d.cat]}</span><span class="tx"><b>${isNew(d)?'<span class="badge new">New</span> ':''}${esc(d.name)}</b><span>${d.min} min · ${esc(d.where)} · ${esc(d.need)}</span>${b!=null?`<span class="pb">Best: ${b}${TESTS[d.id].u}</span>`:''}</span>
   <span class="go">${n?`<span class="badge done">${ICONS.check.replace('<svg','<svg width="14" height="14"')} ${n}×</span>`:'Show me'}</span></button>`}
+function roundInputs(w){const r=S.rounds[w]||{},h=+(r.holes||18),v=x=>x===undefined||x===null?'':esc(x);
+  const f=(k,l,val)=>`<label>${l}<input id="r-${w}-${k}" data-rf="${k}" data-w="${w}" type="number" inputmode="numeric" min="0" max="200" placeholder="—" value="${val}"></label>`;
+  return `<div class="rin">${f('score','Score',v(S.scores[w]))}${f('putts','Putts',v(r.putts))}${f('fir','Fairways',v(r.fir))}${f('gir','Greens',v(r.gir))}
+  <label>Holes<select id="r-${w}-holes" data-rf="holes" data-w="${w}"><option value="18" ${h===18?'selected':''}>18</option><option value="9" ${h===9?'selected':''}>9</option></select></label></div>
+  <p class="rhelp">Fairways: tee shots that stayed in the fairway. Greens: times you were on the green in par minus 2 shots or fewer. Skip any you didn't count.</p>`}
 function taskRow(w,i,t){const k='w'+w+'-'+i,on=!!S.tasks[k],d=t[2]&&BY[t[2]];
   return `<div class="check ${on?'is-done':''}"><button class="box" data-task="${k}" aria-pressed="${on}" aria-label="Mark done: ${esc(t[0])}">${ICONS.check}</button>
-  <div class="ct"><b>${esc(t[0])}</b><div class="row"><span class="where">${esc(t[1])}</span>${d?`<button class="show" data-drill="${d.id}">Show me how</button>`:''}
-  ${t[3]==='play'?`<label class="score">Score <input id="score-${w}" data-score="${w}" type="number" inputmode="numeric" min="18" max="200" placeholder="—" value="${S.scores[w]??''}"></label>`:''}</div></div></div>`}
+  <div class="ct"><b>${esc(t[0])}</b><div class="row"><span class="where">${esc(t[1])}</span>${d?`<button class="show" data-drill="${d.id}">Show me how</button>`:''}</div>
+  ${t[3]==='play'?roundInputs(w):''}</div></div>`}
+
+function todaysDrills(){const dn=dayNum(today()),pick=(cat,o)=>{const l=DRILLS.filter(d=>d.cat===cat);return l[(dn+o)%l.length]};
+  const list=[pick('swing',0),dn%2?pick('long',1):pick('chip',2),pick('putt',3)];const f=focusInfo();
+  if(f&&f.cat&&f.drills){const fd=BY[f.drills[dn%f.drills.length]];if(fd){const slot=f.cat==='swing'?0:f.cat==='putt'?2:1;list[slot]=fd}}
+  return list}
 
 function render(){renderTop();renderNav();const v=$('#view');stopAnims(v);
   if(tab==='today')v.innerHTML=viewToday();
@@ -491,14 +608,17 @@ function render(){renderTop();renderNav();const v=$('#view');stopAnims(v);
   const hc=v.querySelector('canvas[data-hero]');if(hc)startAnim(hc,G(FULL,{ball:true,club:'driver',stance:34,shot:'full',hero:true}));
   renderSync();
 }
-function viewToday(){const w=curWeek(),dn=dayNum(today());
-  const pick=(cat,o)=>{const l=DRILLS.filter(d=>d.cat===cat);return l[(dn+o)%l.length]};
-  const todays=[pick('swing',0),dn%2?pick('long',1):pick('chip',2),pick('putt',3)];
-  const done=weekDone(w),tot=PLAN[w].length;
+function viewToday(){const w=curWeek(),dn=dayNum(today()),todays=todaysDrills(),mins=todays.reduce((a,d)=>a+d.min,0);
+  const done=weekDone(w),tot=PLAN[w].length,si=streakInfo(),practicedToday=!!S.days[today()];
+  const froze=si.froze.some(f=>wkOf(f)===wkOf(dayNum(today())));const f=focusInfo();
   return `<section class="hero"><canvas data-hero width="800" height="500" aria-label="Animated golfer swinging a driver"></canvas>
    <div class="hero-txt"><span class="eyebrow">Week ${w} of 12 · ${phaseOf(w).name}</span><span class="big">${done===tot?'Week complete. Nice work!':`${tot-done} thing${tot-done===1?'':'s'} left this week`}</span>
    <div class="prog"><i style="width:${done/tot*100}%"></i></div></div></section>
-  <div class="stats"><div class="stat"><b>${xp()}</b><span>XP earned</span></div><div class="stat"><b>${streak()}</b><span>Day streak</span></div><div class="stat"><b>${Object.values(S.drills).reduce((a,b)=>a+b,0)}</b><span>Drills done</span></div></div>
+  <button class="startbtn" id="startSess">${ICONS.play}<span><b>Start today's session</b><small>3 drills · about ${mins} min · +25 XP</small></span></button>
+  ${!practicedToday&&si.n>0?`<div class="warn"><b>Keep your ${si.n}-day streak alive.</b> Finish one drill today.${froze?' Your free miss for this week is already used.':' You get one free missed day each week.'}</div>`:''}
+  ${practicedToday&&si.n>0?`<div class="okay"><b>${si.n}-day streak.</b> You practiced today.${froze?' (Your free miss this week saved it.)':''}</div>`:''}
+  <div class="stats"><div class="stat"><b>${xp()}</b><span>XP earned</span></div><div class="stat"><b>${si.n}</b><span>Day streak</span></div><div class="stat"><b>${totalDrills()}</b><span>Drills done</span></div></div>
+  ${f?`<section class="coach"><span class="eyebrow">${f.good?'Coach says':'Your focus: '+CATNAME[f.cat]}</span><p>${esc(f.why)}</p>${f.drills?`<div class="coach-d">${f.drills.map(id=>BY[id]?`<button class="pill-btn" data-drill="${id}">${esc(BY[id].name)}</button>`:'').join('')}</div>`:''}<small>Based on: ${f.src||'your last round'}</small></section>`:''}
   ${(()=>{const nw=DRILLS.filter(isNew).sort((a,b)=>b.added.localeCompare(a.added));return nw.length?`<section class="sec"><div class="sec-h"><h2>Just added</h2><span>New drills every 2 days</span></div><div class="cards">${nw.map(drillCard).join('')}</div></section>`:''})()}
   <section class="sec"><div class="sec-h"><h2>Today's 3 drills</h2><span>New picks every day</span></div><div class="cards">${todays.map(drillCard).join('')}</div></section>
   <div class="tip">${ICONS.bulb}<p><b>Tip of the day.</b> ${esc(TIPS[dn%TIPS.length])}</p></div>
@@ -508,9 +628,12 @@ function phaseOf(w){return PHASES.find(p=>p.w.includes(w))}
 function viewCat(c){const C=CATS[c];
   return `<div class="cathead"><span class="eyebrow">${DRILLS.filter(d=>d.cat===c).length} drills · tap one to watch it</span><h1>${C.name}</h1><p>${C.desc}</p></div>
   <div class="cards two">${DRILLS.filter(d=>d.cat===c).sort((a,b)=>(isNew(b)?1:0)-(isNew(a)?1:0)).map(drillCard).join('')}</div>
-  <div class="settings">Animations show a right-handed golfer. <button class="pill-btn" id="lefty" aria-pressed="${!!S.lefty}">${S.lefty?'Left-handed: on':'I\'m left-handed'}</button></div>`}
+  <div class="settings">Animations show a ${S.lefty?'left':'right'}-handed golfer. <button class="pill-btn" id="lefty" aria-pressed="${!!S.lefty}">${S.lefty?'Switch to right-handed':'I\'m left-handed'}</button></div>`}
+function sparkBars(id){const r=results(id).slice(-8),T=TESTS[id],vals=r.map(x=>x.v),mx=Math.max(...vals,T.hi?1:0),mn=T.hi?0:Math.min(...vals);
+  return `<div class="spark">${r.map(x=>{const h=T.hi?(x.v/Math.max(mx,1)):((mx-x.v)/Math.max(1,mx-mn))*.8+.2;return `<i style="height:${Math.max(8,h*100)}%" title="${x.d}: ${x.v}"></i>`}).join('')}</div>`}
 function viewPlan(){const cw=curWeek(),w=planWeek||cw,p=phaseOf(w),done=weekDone(w),tot=PLAN[w].length;
   const sc=Object.keys(PLAN).map(Number);const vals=sc.map(k=>+S.scores[k]||0).filter(Boolean);const mx=Math.max(...vals,1),mn=Math.min(...vals,mx);
+  const tested=Object.keys(TESTS).filter(id=>results(id).length&&BY[id]);
   return `<div class="cathead"><span class="eyebrow">Started ${new Date(S.start+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric'})} · you're on week ${cw}</span><h1>12-Week Plan</h1></div>
   <div class="weeks" role="group" aria-label="Pick a week">${sc.map(k=>`<button class="wk ${weekDone(k)===PLAN[k].length?'full':''}" data-week="${k}" aria-pressed="${k===w}"><b>${k}</b><span>${k===cw?'Now':weekDone(k)+'/'+PLAN[k].length}</span></button>`).join('')}</div>
   <div class="phase"><span class="eyebrow" style="color:var(--gold)">Weeks ${p.w[0]}–${p.w[2]}</span><b>${p.name}</b><span>${p.txt}</span></div>
@@ -519,34 +642,90 @@ function viewPlan(){const cw=curWeek(),w=planWeek||cw,p=phaseOf(w),done=weekDone
   <section class="sec"><div class="sec-h"><h2>Your rounds</h2><span>${vals.length?'Best: '+Math.min(...vals):'Add a score after you play'}</span></div>
   <div class="rounds">${sc.map(k=>{const s=+S.scores[k];return `<div>${s?`<em>${s}</em><i style="height:${20+60*(mx===mn?1:(mx-s)/(mx-mn)*.8+.2)}%"></i>`:'<i class="empty"></i>'}<span>W${k}</span></div>`}).join('')}</div>
   <span class="muted" style="font-size:13px">Taller bar = lower score. Lower is better.</span></section>
+  <section class="sec"><div class="sec-h"><h2>Drill scores</h2><span>${tested.length?'Your last 8 tries':'Score a drill to see it here'}</span></div>
+  ${tested.length?`<div class="tests">${tested.map(id=>`<button class="test" data-drill="${id}"><span><b>${esc(BY[id].name)}</b><small>Best ${best(id)}${TESTS[id].u} · last ${results(id).slice(-1)[0].v}${TESTS[id].u}</small></span>${sparkBars(id)}</button>`).join('')}</div>`:`<p class="muted" style="margin:0">Drills with a score: ${Object.keys(TESTS).filter(id=>BY[id]).map(id=>BY[id].name).join(', ')}.</p>`}</section>
+  <section class="sec"><div class="sec-h"><h2>Trophy case</h2><span>${Object.keys(S.badges).length} of ${BADGES.length} earned</span></div>
+  <div class="trophies">${BADGES.map(b=>`<div class="trophy ${S.badges[b[0]]?'got':''}"><span class="medal">${S.badges[b[0]]?ICONS.check:''}</span><b>${b[1]}</b><small>${b[2]}</small></div>`).join('')}</div></section>
+  <section class="sec"><div class="sec-h"><h2>Settings</h2></div><div class="settings"><button class="pill-btn" id="lefty" aria-pressed="${!!S.lefty}">${S.lefty?'Left-handed: on':'I\'m left-handed'}</button><button class="pill-btn" id="redoOnb">Change my setup answers</button></div></section>
   <p class="sync" id="syncNote"></p>`}
+
+/* ---------- celebrations ---------- */
+const celQ=[];
+function celebrate(title,sub,badges=[]){celQ.push({title,sub,badges});if($('#cel').hidden)showCel()}
+function showCel(){const c=celQ.shift();if(!c)return;$('#celTitle').textContent=c.title;$('#celSub').textContent=c.sub||'';
+  $('#celBadges').innerHTML=c.badges.map(b=>`<div class="trophy got"><span class="medal">${ICONS.check}</span><b>${esc(b[1])}</b><small>${esc(b[2])}</small></div>`).join('');
+  $('#cel').hidden=false;startAnim($('#celCanvas'),{k:'cel'});$('#celOk').focus()}
+$('#celOk').onclick=()=>{stopAnim($('#celCanvas'));$('#cel').hidden=true;if(celQ.length)showCel()};
+function afterAction(){const nb=newBadges();save();if(nb.length)celebrate(nb.length>1?'New badges!':'New badge!',nb.length>1?`You earned ${nb.length} badges.`:'',nb)}
 
 document.addEventListener('click',e=>{
   const t=e.target.closest('[data-tab]');if(t){tab=t.dataset.tab;planWeek=null;location.hash=tab;render();window.scrollTo(0,0);return}
+  if(e.target.closest('#startSess')){startSession();return}
   const d=e.target.closest('[data-drill]');if(d){openDrill(d.dataset.drill);return}
-  const k=e.target.closest('[data-task]');if(k){const key=k.dataset.task;S.tasks[key]=!S.tasks[key];if(S.tasks[key]){bump();toast(['Nice!','Boom!','Great shot!','In the hole!'][Math.floor(Math.random()*4)]+' +10 XP')}save();render();return}
+  const k=e.target.closest('[data-task]');if(k){const key=k.dataset.task,w=+key.slice(1).split('-')[0],was=weekDone(w);S.tasks[key]=!S.tasks[key];
+    if(S.tasks[key]){bump();toast(['Nice!','Boom!','Great shot!','In the hole!'][Math.floor(Math.random()*4)]+' +10 XP');if(was<PLAN[w].length&&weekDone(w)===PLAN[w].length)celebrate('Week '+w+' complete!','Every task checked off. On to the next one.')}
+    afterAction();render();return}
   const w=e.target.closest('[data-week]');if(w){planWeek=+w.dataset.week;render();return}
   if(e.target.closest('#lefty')){S.lefty=!S.lefty;save();render();return}
+  if(e.target.closest('#redoOnb')){openOnb();return}
 });
-document.addEventListener('change',e=>{const s=e.target.closest('[data-score]');if(s){const v=parseInt(s.value,10);if(v>0)S.scores[s.dataset.score]=v;else delete S.scores[s.dataset.score];save();render()}});
+document.addEventListener('change',e=>{const el=e.target.closest('[data-rf]');if(!el)return;const w=el.dataset.w,f=el.dataset.rf,raw=el.value.trim(),v=parseInt(raw,10);
+  if(f==='score'){if(v>0)S.scores[w]=v;else delete S.scores[w]}
+  else{const r=S.rounds[w]||(S.rounds[w]={});if(f==='holes')r.holes=v;else if(raw===''||isNaN(v))delete r[f];else r[f]=Math.max(0,v)}
+  afterAction();toast('Saved')});
 function fromHash(){const h=location.hash.slice(1);if(TABS.some(t=>t[0]===h))tab=h}
 window.addEventListener('hashchange',()=>{fromHash();render()});
 
-/* ---------- player ---------- */
-let cur=null,step=0;
-function openDrill(id){cur=BY[id];step=0;$('#player').hidden=false;document.body.style.overflow='hidden';$('#pTitle').textContent=cur.name;
-  $('#pNeed').innerHTML=`<b>You need:</b> ${esc(cur.need)} · <b>Where:</b> ${esc(cur.where)} · <b>Time:</b> ${cur.min} min`;showStep();$('#pNext').focus()}
-function closeDrill(){$('#player').hidden=true;document.body.style.overflow='';stopAnim($('#pCanvas'));cur=null;render()}
+/* ---------- player and daily session ---------- */
+let cur=null,step=0,sess=null,sessTimer=null;
+function startSession(){sess={ids:todaysDrills().map(d=>d.id),i:0,t0:Date.now()};openDrill(sess.ids[0]);
+  clearInterval(sessTimer);sessTimer=setInterval(renderSess,1000)}
+function renderSess(){const el=$('#pSess');if(!sess){el.hidden=true;return}el.hidden=false;const s=Math.floor((Date.now()-sess.t0)/1000);
+  el.innerHTML=`<span>Today's session · drill ${sess.i+1} of ${sess.ids.length}</span><b>${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}</b><div class="prog"><i style="width:${(sess.i/sess.ids.length)*100}%"></i></div>`}
+function openDrill(id){cur=BY[id];if(!cur)return;step=0;$('#player').hidden=false;document.body.style.overflow='hidden';$('#pTitle').textContent=cur.name;
+  $('#pNeed').innerHTML=`<b>You need:</b> ${esc(cur.need)} · <b>Where:</b> ${esc(cur.where)} · <b>Time:</b> ${cur.min} min`;
+  $('#pScore').value='';renderSess();showStep();$('#pNext').focus()}
+function closeDrill(){$('#player').hidden=true;document.body.style.overflow='';stopAnim($('#pCanvas'));cur=null;sess=null;clearInterval(sessTimer);render()}
 function showStep(){const n=cur.steps.length,[txt,sc]=cur.steps[step];
   $('#pNum').textContent='Step '+(step+1)+' of '+n;$('#pText').textContent=txt;
   $('#pDots').innerHTML=cur.steps.map((_,i)=>`<i class="${i===step?'on':''}"></i>`).join('');
-  $('#pBack').disabled=step===0;const last=step===n-1,nb=$('#pNext');
-  nb.textContent=last?'I did it! +5 XP':'Next';nb.className='btn '+(last?'win':'pri');
+  $('#pBack').disabled=step===0;const last=step===n-1,nb=$('#pNext'),T=TESTS[cur.id];
+  nb.textContent=!last?'Next':sess?(sess.i<sess.ids.length-1?'Done! Next drill':'Finish session'):'I did it! +5 XP';nb.className='btn '+(last?'win':'pri');
+  const tb=$('#pTest');tb.hidden=!(last&&T);if(last&&T){const b=best(cur.id);$('#pTestQ').textContent=T.q;$('#pTestBest').textContent=b!=null?`Your best: ${b}${T.u}`:'First time? Any score counts.';$('#pScore').max=T.max}
   startAnim($('#pCanvas'),sc)}
+function finishDrill(){const id=cur.id,T=TESTS[id];S.drills[id]=(S.drills[id]||0)+1;bump();
+  if(T){const v=parseInt($('#pScore').value,10);if(!isNaN(v)&&v>=0&&v<=T.max){const prev=best(id);(S.tests[id]=results(id)).push({d:today(),v});
+    if(prev!=null&&(T.hi?v>prev:v<prev))celebrate('New personal best!',`${cur.name}: ${v}${T.u}. Your old best was ${prev}${T.u}.`)}}
+  if(sess){if(sess.i<sess.ids.length-1){sess.i++;afterAction();toast('Drill done! +5 XP');openDrill(sess.ids[sess.i]);return}
+    const m=Math.max(1,Math.round((Date.now()-sess.t0)/60000));S.sessDone=(S.sessDone||0)+1;afterAction();
+    celebrate('Session complete!',`3 drills in ${m} minute${m===1?'':'s'}. +25 XP`);closeDrill();return}
+  afterAction();toast('Drill done! +5 XP');closeDrill()}
 $('#pBack').onclick=()=>{if(step>0){step--;showStep()}};
-$('#pNext').onclick=()=>{if(step<cur.steps.length-1){step++;showStep()}else{S.drills[cur.id]=(S.drills[cur.id]||0)+1;bump();save();toast('Drill done! +5 XP');closeDrill()}};
+$('#pNext').onclick=()=>{if(step<cur.steps.length-1){step++;showStep()}else finishDrill()};
 $('#pClose').onclick=closeDrill;
-document.addEventListener('keydown',e=>{if($('#player').hidden)return;if(e.key==='Escape')closeDrill();if(e.key==='ArrowRight')$('#pNext').click();if(e.key==='ArrowLeft')$('#pBack').click()});
+document.addEventListener('keydown',e=>{if(!$('#cel').hidden){if(e.key==='Escape')$('#celOk').click();return}if($('#player').hidden)return;if(e.target.matches('input'))return;if(e.key==='Escape')closeDrill();if(e.key==='ArrowRight')$('#pNext').click();if(e.key==='ArrowLeft')$('#pBack').click()});
+
+/* ---------- first-open setup ---------- */
+const ONB=[
+ {k:'hand',q:'Which way do you swing?',o:[['right','Right-handed'],['left','Left-handed']]},
+ {k:'score',q:'What do you usually shoot for 18 holes?',o:[['u90','Under 90'],['90','90 to 100'],['100','100 to 110'],['110','Over 110'],['none','I don\'t keep score yet']]},
+ {k:'issue',q:'What bugs you most right now?',o:Object.entries(ISSUES).map(([k,v])=>[k,v.t])}
+];
+let onbStep=0,onbAns={};
+function openOnb(){onbStep=0;onbAns={...S.profile};$('#onb').hidden=false;document.body.style.overflow='hidden';renderOnb()}
+function renderOnb(){const box=$('#onbBody');
+  if(onbStep>=ONB.length){const is=ISSUES[onbAns.issue];
+    box.innerHTML=`<span class="eyebrow">All set</span><h2>Your plan is ready</h2>
+    <p>${is&&is.cat?`We'll lean your daily drills toward <b>${CATNAME[is.cat].toLowerCase()}</b>. ${esc(is.why)}`:'You get a balanced mix of swing, long game, chipping and putting.'}</p>
+    <p class="muted">After each round, add your putts, fairways and greens. The app uses them to pick what to practice next.</p>
+    <button class="btn pri" id="onbDone">Let's go</button>`;return}
+  const Q=ONB[onbStep];
+  box.innerHTML=`<span class="eyebrow">Question ${onbStep+1} of ${ONB.length}</span><h2>${Q.q}</h2><div class="opts">${Q.o.map(([v,l])=>`<button class="opt ${onbAns[Q.k]===v?'sel':''}" data-onb="${v}">${esc(l)}</button>`).join('')}</div>
+  <button class="skip" id="onbSkip">Skip for now</button>`}
+$('#onb').addEventListener('click',e=>{const o=e.target.closest('[data-onb]');
+  if(o){onbAns[ONB[onbStep].k]=o.dataset.onb;onbStep++;renderOnb();return}
+  if(e.target.closest('#onbSkip')||e.target.closest('#onbDone')){S.profile={...S.profile,...onbAns};if(onbAns.hand)S.lefty=onbAns.hand==='left';S.onboarded=true;save();
+    $('#onb').hidden=true;document.body.style.overflow='';render()}});
 
 /* ======================= ANIMATION ENGINE ======================= */
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches?0.5:1;
@@ -824,10 +1003,17 @@ SCENES.r=function(ctx,t,o){const C=COL;ctx.fillStyle=C.turf;ctx.fillRect(0,0,400
     ballAt(ctx,bx,by,lerp(5,3,k))});
   if(!sh.length||tt>sh.length*seg)ballAt(ctx,200,222);
   ctx.restore();MIR=false};
+// celebration: ball rolls into the cup, then confetti
+SCENES.cel=function(ctx,t){const C=COL;ctx.fillStyle=C.turf;ctx.fillRect(0,0,400,250);ctx.fillStyle=C.putt;ctx.beginPath();ctx.ellipse(200,140,190,100,0,0,7);ctx.fill();
+  const hx=255,hy=140;ctx.fillStyle=C.hole;ctx.beginPath();ctx.arc(hx,hy,9,0,7);ctx.fill();line(ctx,hx,hy,hx,hy-82,3,C.ink);
+  ctx.fillStyle=C.flag;ctx.beginPath();ctx.moveTo(hx,hy-82);ctx.lineTo(hx+32,hy-71);ctx.lineTo(hx,hy-60);ctx.fill();
+  const u=Math.min(1,t/1.4),k=1-Math.pow(1-u,2.2);if(u<1)ballAt(ctx,lerp(50,hx,k),lerp(180,hy,k),6);
+  const s=t-1.3;if(s>0&&s<3){const cs=[C.gold,C.flag,C.ball,C.fair];for(let i=0;i<70;i++){const a=i*2.399,sp=50+((i*37)%110),x=hx+Math.cos(a)*sp*s,y=hy-30+Math.sin(a)*sp*s*.7+70*s*s;
+    ctx.globalAlpha=Math.max(0,1-s/2.6);ctx.fillStyle=cs[i%4];ctx.save();ctx.translate(x,y);ctx.rotate(a+s*6);ctx.fillRect(-2.5,-4,5,8);ctx.restore()}ctx.globalAlpha=1}};
 let SCENES_READY=true;
 
 /* ======================= BOOT ======================= */
-fromHash();render();
+fromHash();render();if(!S.onboarded)openOnb();
 </script>
 
 </body>
