@@ -13,5 +13,36 @@
       {"t": "Before you look, guess: short or long? Left or right? Then open your eyes and check.", "s": {"k": "gr", "hole": [340, 125], "balls": [[318, 132]], "ring": 28, "label": "Short and right?"}},
       {"t": "Do 10. Your guesses get better as your feel for distance gets better.", "s": {"k": "gr", "hole": [340, 125], "ring": 28, "rolls": [{"f": [50, 125], "to": [352, 118]}, {"f": [50, 125], "to": [332, 128]}, {"f": [50, 125], "to": [340, 125], "inn": true}]}}
     ]
+  },
+  {
+    "id": "2026-11-19-pause-and-chip",
+    "cat": "chip",
+    "name": "Pause-and-Chip",
+    "min": 10,
+    "where": "Practice green",
+    "need": "Wedge, 5 balls",
+    "added": "2026-11-19",
+    "steps": [
+      {"t": "Set up for a normal chip. Feet close together, ball in the middle.", "s": {"k": "g", "seq": ["chipAddr"], "stance": 14, "ball": true, "hl": "feet", "label": "Normal chip setup"}},
+      {"t": "Swing back a short way. Then stop and hold still for one second.", "s": {"k": "g", "seq": ["chipAddr", "chipBack", "chipBack", "chipBack"], "stance": 14, "ball": true, "hl": "hands", "slow": 2, "label": "Back... and pause"}},
+      {"t": "Now chip it. Turn your chest to the target and keep your hands moving.", "s": {"k": "g", "seq": ["chipBack", "chipThru"], "stance": 14, "ball": true, "shot": "chip", "hl": "shoulders", "label": "Turn through"}},
+      {"t": "The pause stops you from rushing. Hit 5 chips with a pause to one flag.", "s": {"k": "f", "flag": 330, "shots": [{"land": 240, "stop": 320, "h": 35, "lbl": "Pause, then chip"}]}},
+      {"t": "Then hit 5 with no pause. Try to keep the same smooth feel.", "s": {"k": "f", "flag": 330, "shots": [{"land": 238, "stop": 325, "h": 35, "lbl": "Same feel"}, {"land": 244, "stop": 335, "h": 35, "lbl": "No pause"}]}}
+    ]
+  },
+  {
+    "id": "2026-11-19-wall-turn",
+    "cat": "swing",
+    "name": "Wall Turn Drill",
+    "min": 5,
+    "where": "Home",
+    "need": "A club, a wall",
+    "added": "2026-11-19",
+    "steps": [
+      {"t": "Stand side-on to a wall, with the wall behind your back hip. Leave a few inches of space.", "s": {"k": "g", "seq": ["address"], "hl": "hips", "label": "Wall just behind back hip"}},
+      {"t": "Swing back slowly. Turn your hips, but don't let them slide into the wall.", "s": {"k": "g", "seq": ["address", "takeaway", "half", "top"], "hl": "hips", "slow": 3, "label": "Turn, don't slide"}},
+      {"t": "If your hip bumps the wall, you swayed. Stay over your back foot and turn in place.", "s": {"k": "g", "seq": ["top"], "hl": "knees", "label": "No bump = good turn"}},
+      {"t": "Do 10 slow swings back to the top and through to the finish. Keep it smooth.", "s": {"k": "g", "seq": ["address", "takeaway", "top", "down", "impact", "finish"], "hl": "hips", "slow": 2, "count": true}}
+    ]
   }
 ]
