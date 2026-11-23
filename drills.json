@@ -8,10 +8,115 @@
     "need": "Putter, 3 balls",
     "added": "2026-11-17",
     "steps": [
-      {"t": "Pick a hole 25 feet away. Look at the hole, then look at your ball.", "s": {"k": "gr", "hole": [340, 125], "balls": [[50, 125]], "aim": true, "labels": [[195, 100, "25 ft"]]}},
-      {"t": "Close your eyes and putt. Keep them closed.", "s": {"k": "gr", "hole": [340, 125], "rolls": [{"f": [50, 125], "to": [318, 132]}], "label": "Eyes closed"}},
-      {"t": "Before you look, guess: short or long? Left or right? Then open your eyes and check.", "s": {"k": "gr", "hole": [340, 125], "balls": [[318, 132]], "ring": 28, "label": "Short and right?"}},
-      {"t": "Do 10. Your guesses get better as your feel for distance gets better.", "s": {"k": "gr", "hole": [340, 125], "ring": 28, "rolls": [{"f": [50, 125], "to": [352, 118]}, {"f": [50, 125], "to": [332, 128]}, {"f": [50, 125], "to": [340, 125], "inn": true}]}}
+      {
+        "t": "Pick a hole 25 feet away. Look at the hole, then look at your ball.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            340,
+            125
+          ],
+          "balls": [
+            [
+              50,
+              125
+            ]
+          ],
+          "aim": true,
+          "labels": [
+            [
+              195,
+              100,
+              "25 ft"
+            ]
+          ]
+        }
+      },
+      {
+        "t": "Close your eyes and putt. Keep them closed.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            340,
+            125
+          ],
+          "rolls": [
+            {
+              "f": [
+                50,
+                125
+              ],
+              "to": [
+                318,
+                132
+              ]
+            }
+          ],
+          "label": "Eyes closed"
+        }
+      },
+      {
+        "t": "Before you look, guess: short or long? Left or right? Then open your eyes and check.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            340,
+            125
+          ],
+          "balls": [
+            [
+              318,
+              132
+            ]
+          ],
+          "ring": 28,
+          "label": "Short and right?"
+        }
+      },
+      {
+        "t": "Do 10. Your guesses get better as your feel for distance gets better.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            340,
+            125
+          ],
+          "ring": 28,
+          "rolls": [
+            {
+              "f": [
+                50,
+                125
+              ],
+              "to": [
+                352,
+                118
+              ]
+            },
+            {
+              "f": [
+                50,
+                125
+              ],
+              "to": [
+                332,
+                128
+              ]
+            },
+            {
+              "f": [
+                50,
+                125
+              ],
+              "to": [
+                340,
+                125
+              ],
+              "inn": true
+            }
+          ]
+        }
+      }
     ]
   },
   {
@@ -23,11 +128,87 @@
     "need": "Wedge, 5 balls",
     "added": "2026-11-19",
     "steps": [
-      {"t": "Set up for a normal chip. Feet close together, ball in the middle.", "s": {"k": "g", "seq": ["chipAddr"], "stance": 14, "ball": true, "hl": "feet", "label": "Normal chip setup"}},
-      {"t": "Swing back a short way. Then stop and hold still for one second.", "s": {"k": "g", "seq": ["chipAddr", "chipBack", "chipBack", "chipBack"], "stance": 14, "ball": true, "hl": "hands", "slow": 2, "label": "Back... and pause"}},
-      {"t": "Now chip it. Turn your chest to the target and keep your hands moving.", "s": {"k": "g", "seq": ["chipBack", "chipThru"], "stance": 14, "ball": true, "shot": "chip", "hl": "shoulders", "label": "Turn through"}},
-      {"t": "The pause stops you from rushing. Hit 5 chips with a pause to one flag.", "s": {"k": "f", "flag": 330, "shots": [{"land": 240, "stop": 320, "h": 35, "lbl": "Pause, then chip"}]}},
-      {"t": "Then hit 5 with no pause. Try to keep the same smooth feel.", "s": {"k": "f", "flag": 330, "shots": [{"land": 238, "stop": 325, "h": 35, "lbl": "Same feel"}, {"land": 244, "stop": 335, "h": 35, "lbl": "No pause"}]}}
+      {
+        "t": "Set up for a normal chip. Feet close together, ball in the middle.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "chipAddr"
+          ],
+          "stance": 14,
+          "ball": true,
+          "hl": "feet",
+          "label": "Normal chip setup"
+        }
+      },
+      {
+        "t": "Swing back a short way. Then stop and hold still for one second.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "chipAddr",
+            "chipBack",
+            "chipBack",
+            "chipBack"
+          ],
+          "stance": 14,
+          "ball": true,
+          "hl": "hands",
+          "slow": 2,
+          "label": "Back... and pause"
+        }
+      },
+      {
+        "t": "Now chip it. Turn your chest to the target and keep your hands moving.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "chipBack",
+            "chipThru"
+          ],
+          "stance": 14,
+          "ball": true,
+          "shot": "chip",
+          "hl": "shoulders",
+          "label": "Turn through"
+        }
+      },
+      {
+        "t": "The pause stops you from rushing. Hit 5 chips with a pause to one flag.",
+        "s": {
+          "k": "f",
+          "flag": 330,
+          "shots": [
+            {
+              "land": 240,
+              "stop": 320,
+              "h": 35,
+              "lbl": "Pause, then chip"
+            }
+          ]
+        }
+      },
+      {
+        "t": "Then hit 5 with no pause. Try to keep the same smooth feel.",
+        "s": {
+          "k": "f",
+          "flag": 330,
+          "shots": [
+            {
+              "land": 238,
+              "stop": 325,
+              "h": 35,
+              "lbl": "Same feel"
+            },
+            {
+              "land": 244,
+              "stop": 335,
+              "h": 35,
+              "lbl": "No pause"
+            }
+          ]
+        }
+      }
     ]
   },
   {
@@ -39,10 +220,316 @@
     "need": "A club, a wall",
     "added": "2026-11-19",
     "steps": [
-      {"t": "Stand side-on to a wall, with the wall behind your back hip. Leave a few inches of space.", "s": {"k": "g", "seq": ["address"], "hl": "hips", "label": "Wall just behind back hip"}},
-      {"t": "Swing back slowly. Turn your hips, but don't let them slide into the wall.", "s": {"k": "g", "seq": ["address", "takeaway", "half", "top"], "hl": "hips", "slow": 3, "label": "Turn, don't slide"}},
-      {"t": "If your hip bumps the wall, you swayed. Stay over your back foot and turn in place.", "s": {"k": "g", "seq": ["top"], "hl": "knees", "label": "No bump = good turn"}},
-      {"t": "Do 10 slow swings back to the top and through to the finish. Keep it smooth.", "s": {"k": "g", "seq": ["address", "takeaway", "top", "down", "impact", "finish"], "hl": "hips", "slow": 2, "count": true}}
+      {
+        "t": "Stand side-on to a wall, with the wall behind your back hip. Leave a few inches of space.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "address"
+          ],
+          "hl": "hips",
+          "label": "Wall just behind back hip"
+        }
+      },
+      {
+        "t": "Swing back slowly. Turn your hips, but don't let them slide into the wall.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "address",
+            "takeaway",
+            "half",
+            "top"
+          ],
+          "hl": "hips",
+          "slow": 3,
+          "label": "Turn, don't slide"
+        }
+      },
+      {
+        "t": "If your hip bumps the wall, you swayed. Stay over your back foot and turn in place.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "top"
+          ],
+          "hl": "knees",
+          "label": "No bump = good turn"
+        }
+      },
+      {
+        "t": "Do 10 slow swings back to the top and through to the finish. Keep it smooth.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "address",
+            "takeaway",
+            "top",
+            "down",
+            "impact",
+            "finish"
+          ],
+          "hl": "hips",
+          "slow": 2,
+          "count": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "2026-11-23-five-on-target",
+    "cat": "long",
+    "name": "Five on Target",
+    "min": 15,
+    "where": "Range",
+    "need": "7 iron, a bucket of balls",
+    "added": "2026-11-23",
+    "steps": [
+      {
+        "t": "Pick one flag on the range. Pick a club that can reach it, like a 7 iron.",
+        "s": {
+          "k": "r",
+          "targets": [
+            [
+              200,
+              70
+            ]
+          ],
+          "aim": true
+        }
+      },
+      {
+        "t": "Hit one ball at the flag. Count every ball you hit.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "address",
+            "takeaway",
+            "top",
+            "down",
+            "impact",
+            "finish"
+          ],
+          "ball": true,
+          "label": "Ball 1"
+        }
+      },
+      {
+        "t": "A ball counts as on target if it lands close to the flag. Pick a size first, like 10 steps around it.",
+        "s": {
+          "k": "r",
+          "targets": [
+            [
+              200,
+              70
+            ]
+          ],
+          "shots": [
+            {
+              "to": [
+                205,
+                78
+              ],
+              "c": 0
+            },
+            {
+              "to": [
+                150,
+                95
+              ],
+              "c": -20
+            }
+          ]
+        }
+      },
+      {
+        "t": "Keep going until you get 5 on target. Write down how many balls it took.",
+        "s": {
+          "k": "r",
+          "targets": [
+            [
+              200,
+              70
+            ]
+          ],
+          "shots": [
+            {
+              "to": [
+                210,
+                75
+              ],
+              "c": 5
+            },
+            {
+              "to": [
+                190,
+                68
+              ],
+              "c": -5
+            },
+            {
+              "to": [
+                255,
+                110
+              ],
+              "c": 25
+            },
+            {
+              "to": [
+                198,
+                80
+              ],
+              "c": 0
+            },
+            {
+              "to": [
+                206,
+                64
+              ],
+              "c": 3
+            }
+          ]
+        }
+      },
+      {
+        "t": "Play again next time and try to beat your number.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "finish"
+          ],
+          "hl": "hands",
+          "label": "Beat your score"
+        }
+      }
+    ]
+  },
+  {
+    "id": "2026-11-23-coin-under-ball",
+    "cat": "putt",
+    "name": "Coin Under the Ball",
+    "min": 10,
+    "where": "Practice green",
+    "need": "Putter, 3 balls, a coin",
+    "added": "2026-11-23",
+    "steps": [
+      {
+        "t": "Put a coin on the green. Set your ball right on top of it, 4 feet from a hole.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            300,
+            125
+          ],
+          "balls": [
+            [
+              120,
+              125
+            ]
+          ],
+          "labels": [
+            [
+              120,
+              150,
+              "coin"
+            ],
+            [
+              210,
+              100,
+              "4 ft"
+            ]
+          ],
+          "aim": true
+        }
+      },
+      {
+        "t": "Set up to putt. Point your eyes at the back of the ball.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "puttAddr"
+          ],
+          "club": "putter",
+          "stance": 16,
+          "ball": true,
+          "hl": "head",
+          "label": "Eyes on the ball"
+        }
+      },
+      {
+        "t": "Make your stroke. Keep your head still and keep looking down.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "puttAddr",
+            "puttBack",
+            "puttThru"
+          ],
+          "club": "putter",
+          "stance": 16,
+          "ball": true,
+          "shot": "putt",
+          "hl": "head"
+        }
+      },
+      {
+        "t": "After the ball is gone, stare at the coin and count to two. Listen for the ball to drop.",
+        "s": {
+          "k": "g",
+          "seq": [
+            "puttThru"
+          ],
+          "club": "putter",
+          "stance": 16,
+          "hl": "head",
+          "label": "Look at the coin: 1, 2"
+        }
+      },
+      {
+        "t": "Do 3 rounds of 3 balls. Count how many you make.",
+        "s": {
+          "k": "gr",
+          "hole": [
+            300,
+            125
+          ],
+          "count": true,
+          "rolls": [
+            {
+              "f": [
+                120,
+                125
+              ],
+              "to": [
+                300,
+                125
+              ],
+              "inn": true
+            },
+            {
+              "f": [
+                120,
+                125
+              ],
+              "to": [
+                312,
+                132
+              ]
+            },
+            {
+              "f": [
+                120,
+                125
+              ],
+              "to": [
+                300,
+                125
+              ],
+              "inn": true
+            }
+          ]
+        }
+      }
     ]
   }
 ]
